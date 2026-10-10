@@ -1,0 +1,228 @@
+name: eam-cluster
+
+networks:
+  patroni_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
+
+volumes:
+  etcd1_data:
+  etcd2_data:
+  etcd3_data:
+  pg1_data:
+  pg2_data:
+  pg3_data:
+
+services:
+  etcd1:
+    image: quay.io/coreos/etcd:v3.5.15
+    container_name: etcd1
+    hostname: etcd1
+    restart: unless-stopped
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.10
+    environment:
+      ETCD_NAME: etcd1
+      ETCD_DATA_DIR: /etcd-data
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd1:2379
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd1:2380
+      ETCD_INITIAL_CLUSTER: etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
+      ETCD_INITIAL_CLUSTER_TOKEN: eam-etcd-cluster
+      ETCD_INITIAL_CLUSTER_STATE: new
+    volumes:
+      - etcd1_data:/etcd-data
+    healthcheck:
+      test: ["CMD", "etcdctl", "--endpoints=http://127.0.0.1:2379", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  etcd2:
+    image: quay.io/coreos/etcd:v3.5.15
+    container_name: etcd2
+    hostname: etcd2
+    restart: unless-stopped
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.20
+    environment:
+      ETCD_NAME: etcd2
+      ETCD_DATA_DIR: /etcd-data
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd2:2379
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd2:2380
+      ETCD_INITIAL_CLUSTER: etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
+      ETCD_INITIAL_CLUSTER_TOKEN: eam-etcd-cluster
+      ETCD_INITIAL_CLUSTER_STATE: new
+    volumes:
+      - etcd2_data:/etcd-data
+    healthcheck:
+      test: ["CMD", "etcdctl", "--endpoints=http://127.0.0.1:2379", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  etcd3:
+    image: quay.io/coreos/etcd:v3.5.15
+    container_name: etcd3
+    hostname: etcd3
+    restart: unless-stopped
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.30
+    environment:
+      ETCD_NAME: etcd3
+      ETCD_DATA_DIR: /etcd-data
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd3:2379
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd3:2380
+      ETCD_INITIAL_CLUSTER: etcd1=http://etcd1:2380,etcd2=http://etcd2:2380,etcd3=http://etcd3:2380
+      ETCD_INITIAL_CLUSTER_TOKEN: eam-etcd-cluster
+      ETCD_INITIAL_CLUSTER_STATE: new
+    volumes:
+      - etcd3_data:/etcd-data
+    healthcheck:
+      test: ["CMD", "etcdctl", "--endpoints=http://127.0.0.1:2379", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  pg1:
+    build:
+      context: ./patroni
+      dockerfile: Dockerfile
+    image: eam-patroni:latest
+    container_name: pg1
+    hostname: pg1
+    restart: unless-stopped
+    depends_on:
+      etcd1:
+        condition: service_healthy
+      etcd2:
+        condition: service_healthy
+      etcd3:
+        condition: service_healthy
+      pg1_init:
+        condition: service_completed_successfully
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.11
+    ports:
+      - "5432:5432"
+      - "8008:8008"
+    volumes:
+      - pg1_data:/var/lib/postgresql/18/docker
+      - ./patroni/patroni-pg1.yml:/home/postgres/patroni.yml:ro
+
+  pg2:
+    build:
+      context: ./patroni
+      dockerfile: Dockerfile
+    image: eam-patroni:latest
+    container_name: pg2
+    hostname: pg2
+    restart: unless-stopped
+    depends_on:
+      etcd1:
+        condition: service_healthy
+      etcd2:
+        condition: service_healthy
+      etcd3:
+        condition: service_healthy
+      pg2_init:
+        condition: service_completed_successfully
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.21
+    ports:
+      - "5433:5432"
+      - "8009:8008"
+    volumes:
+      - pg2_data:/var/lib/postgresql/18/docker
+      - ./patroni/patroni-pg2.yml:/home/postgres/patroni.yml:ro
+
+  pg3:
+    build:
+      context: ./patroni
+      dockerfile: Dockerfile
+    image: eam-patroni:latest
+    container_name: pg3
+    hostname: pg3
+    restart: unless-stopped
+    depends_on:
+      etcd1:
+        condition: service_healthy
+      etcd2:
+        condition: service_healthy
+      etcd3:
+        condition: service_healthy
+      pg3_init:
+        condition: service_completed_successfully
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.31
+    ports:
+      - "5434:5432"
+      - "8010:8008"
+    volumes:
+      - pg3_data:/var/lib/postgresql/18/docker
+      - ./patroni/patroni-pg3.yml:/home/postgres/patroni.yml:ro
+
+  haproxy:
+    image: haproxy:2.8
+    container_name: haproxy
+    hostname: haproxy
+    restart: unless-stopped
+    depends_on:
+      - pg1
+      - pg2
+      - pg3
+    networks:
+      patroni_net:
+        ipv4_address: 172.29.0.9
+    ports:
+      - "5000:5000"   
+      - "5001:5001"   
+      - "7000:7000"   
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+
+  pg1_init:
+    image: alpine:latest
+    container_name: pg1_init
+    volumes:
+      - pg1_data:/data
+    command: sh -c "chown -R 999:999 /data && chmod 700 /data"
+    restart: "no"
+    networks:
+      - patroni_net
+
+  pg2_init:
+    image: alpine:latest
+    container_name: pg2_init
+    volumes:
+      - pg2_data:/data
+    command: sh -c "chown -R 999:999 /data && chmod 700 /data"
+    restart: "no"
+    networks:
+      - patroni_net
+
+  pg3_init:
+    image: alpine:latest
+    container_name: pg3_init
+    volumes:
+      - pg3_data:/data
+    command: sh -c "chown -R 999:999 /data && chmod 700 /data"
+    restart: "no"
+    networks:
+      - patroni_net

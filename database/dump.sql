@@ -1,1 +1,1 @@
-CREATE DATABASE eam_system;
+CREATE DATABASE eam_database;
