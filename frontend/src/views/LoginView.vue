@@ -4,26 +4,21 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// ====== Форма ======
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-// ====== ЗАГЛУШКА: список пользователей для теста ======
-// Потом заменишь на authStore.login()
 const MOCK_USERS = [
   { username: 'admin', password: 'admin', role: 'ADMIN', fullName: 'Администратор Системы' },
   { username: 'master', password: 'master', role: 'MASTER', fullName: 'Иванов Иван' },
   { username: 'tech', password: 'tech', role: 'TECHNICIAN', fullName: 'Петров Пётр' },
   { username: 'user', password: 'user', role: 'REQUESTER', fullName: 'Сидоров Сидор' },
 ]
-// ========================================================
 
 async function handleLogin() {
   error.value = null
 
-  // Валидация
   if (!username.value.trim() || !password.value.trim()) {
     error.value = 'Заполните все поля'
     return
@@ -31,7 +26,6 @@ async function handleLogin() {
 
   loading.value = true
 
-  // Имитация запроса к бэкенду
   await new Promise((r) => setTimeout(r, 500))
 
   const found = MOCK_USERS.find(
@@ -44,8 +38,6 @@ async function handleLogin() {
     return
   }
 
-  // TODO: здесь будет authStore.login(username, password)
-  // Пока просто сохраняем пользователя в localStorage
   localStorage.setItem(
     'eam_user',
     JSON.stringify({

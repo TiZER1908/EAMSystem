@@ -1,10 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
-// Layout
 import AppLayout from '@/components/layout/AppLayout.vue'
 
-// Views (заглушки — потом заменишь на реальные)
 const DashboardView = () => import('@/views/DashboardView.vue')
 const AssetsListView = () => import('@/views/AssetsListView.vue')
 const RequestsListView = () => import('@/views/RequestsListView.vue')
@@ -20,7 +18,6 @@ const LoginView = () => import('@/views/LoginView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 
 const routes: RouteRecordRaw[] = [
-  // ====== Авторизация (без layout) ======
   {
     path: '/login',
     name: 'login',
@@ -28,7 +25,6 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
 
-  // ====== Основные страницы (с layout) ======
   {
     path: '/',
     component: AppLayout,
@@ -104,7 +100,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
-  // ====== 404 ======
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
@@ -117,7 +112,6 @@ const router = createRouter({
   routes,
 })
 
-// ====== Navigation Guard (пока заглушка) ======
 router.beforeEach((to, _from, next) => {
   // TODO: раскомментировать, когда будет authStore
   // const authStore = useAuthStore()
@@ -135,7 +129,6 @@ router.beforeEach((to, _from, next) => {
   next()
 })
 
-// Обновляем title страницы
 router.afterEach((to) => {
   const title = (to.meta.title as string) ?? 'EAM System'
   document.title = `${title} | EAM System`

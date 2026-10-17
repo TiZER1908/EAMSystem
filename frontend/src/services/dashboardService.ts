@@ -1,6 +1,3 @@
-// Сервис для получения данных дашборда.
-// Пока возвращает заглушки, потом заменишь на реальные вызовы api.
-
 export interface KpiCard {
   id: string
   label: string
@@ -34,11 +31,9 @@ export interface SystemStatusItem {
   value: string
 }
 
-// ====== ЗАГЛУШКИ ======
-
 export const dashboardService = {
   async getKpiCards(): Promise<KpiCard[]> {
-    // TODO: return api.get('/dashboard/kpi')
+    // return api.get('/dashboard/kpi')
     await new Promise((r) => setTimeout(r, 200))
 
     return [
@@ -82,7 +77,7 @@ export const dashboardService = {
   },
 
   async getRecentRequests(): Promise<RecentRequest[]> {
-    // TODO: return api.get('/requests?limit=5')
+    // return api.get('/requests?limit=5')
     await new Promise((r) => setTimeout(r, 200))
 
     return [
@@ -130,7 +125,7 @@ export const dashboardService = {
   },
 
   async getEvents(): Promise<EventItem[]> {
-    // TODO: return api.get('/dashboard/events')
+    // return api.get('/dashboard/events')
     await new Promise((r) => setTimeout(r, 200))
 
     return [
@@ -173,7 +168,7 @@ export const dashboardService = {
   },
 
   async getSystemStatus(): Promise<SystemStatusItem[]> {
-    // TODO: return api.get('/monitoring/status')
+    // return api.get('/monitoring/status')
     await new Promise((r) => setTimeout(r, 200))
 
     return [
