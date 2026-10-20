@@ -87,7 +87,7 @@ docker compose up -d
 
 ### 2. Запуск Backend (Spring Boot)
 
-Перейдите в директорию `backend`. Убедитесь, что в `application.properties` указан корректный URL к HAProxy (`jdbc:postgresql://localhost:5000/eam_db`).
+Перейдите в директорию `backend`. Убедитесь, что в `application.properties` указан корректный URL к HAProxy (`jdbc:postgresql://localhost:5000/eam_database`).
 
 ```bash
 cd backend
