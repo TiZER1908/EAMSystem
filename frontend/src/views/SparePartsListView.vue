@@ -3,6 +3,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { sparePartService, type SparePart, type SparePartStatus } from '@/services/sparePartService'
 
+import IconEdit from '@/assets/icons/edit.svg?component'
+import IconArchive from '@/assets/icons/archive.svg?component'
+
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
@@ -141,9 +144,11 @@ function stockClass(quantity: number) {
                 </span>
               </td>
               <td v-if="canEdit" class="actions-col">
-                <button class="action-btn" title="Редактировать">✏️</button>
+                <button class="action-btn" title="Редактировать">
+                  <component :is="IconEdit" class="action-btn__icon" />
+                </button>
                 <button v-if="canDelete" class="action-btn action-btn--danger" title="Архивировать">
-                  📦
+                  <component :is="IconArchive" class="action-btn__icon" />
                 </button>
               </td>
             </tr>
@@ -371,8 +376,7 @@ function stockClass(quantity: number) {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  padding: 4px 6px;
+  padding: 4px 4px 0px 4px;
   border-radius: 4px;
   transition: background 0.15s ease;
 }
@@ -381,11 +385,19 @@ function stockClass(quantity: number) {
   background: #f1f5f9;
 }
 
+.action-btn--danger {
+  color: #ef4444;
+}
+
 .action-btn--danger:hover {
   background: #fee2e2;
 }
 
-/* ====== Пагинация ====== */
+.action-btn__icon {
+  width: 25px;
+  height: 25px;
+}
+
 .pagination {
   display: flex;
   align-items: center;

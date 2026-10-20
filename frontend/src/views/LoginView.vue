@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import IconLogo from '@/assets/logo.svg?component'
 
 const router = useRouter()
 
@@ -65,14 +66,12 @@ function fillDemo(role: string) {
 <template>
   <div class="login">
     <div class="login__card">
-      <!-- Логотип -->
       <div class="login__header">
-        <div class="login__logo">⚙️</div>
+        <component :is="IconLogo" class="login__logo" />
         <h1 class="login__title">EAM System</h1>
         <p class="login__subtitle">Управление производственными активами</p>
       </div>
 
-      <!-- Форма -->
       <form class="login__form" @submit.prevent="handleLogin">
         <div class="login__field">
           <label class="login__label" for="username">Логин</label>
@@ -100,20 +99,17 @@ function fillDemo(role: string) {
           />
         </div>
 
-        <!-- Ошибка -->
         <div v-if="error" class="login__error">
           <span class="login__error-icon">⚠️</span>
           {{ error }}
         </div>
 
-        <!-- Кнопка -->
         <button type="submit" class="login__btn" :disabled="loading">
           <span v-if="loading" class="login__spinner"></span>
           <span v-else>Войти</span>
         </button>
       </form>
 
-      <!-- Демо-доступы -->
       <div class="login__demo">
         <div class="login__demo-title">Демо-доступы:</div>
         <div class="login__demo-buttons">
@@ -150,7 +146,6 @@ function fillDemo(role: string) {
   padding: 24px;
 }
 
-/* ====== Карточка ====== */
 .login__card {
   width: 100%;
   max-width: 420px;
@@ -160,14 +155,14 @@ function fillDemo(role: string) {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
-/* ====== Заголовок ====== */
 .login__header {
   text-align: center;
   margin-bottom: 32px;
 }
 
 .login__logo {
-  font-size: 48px;
+  width: 50px;
+  height: 50px;
   line-height: 1;
   margin-bottom: 12px;
 }
@@ -185,7 +180,6 @@ function fillDemo(role: string) {
   margin: 0;
 }
 
-/* ====== Форма ====== */
 .login__form {
   display: flex;
   flex-direction: column;
@@ -230,7 +224,6 @@ function fillDemo(role: string) {
   cursor: not-allowed;
 }
 
-/* ====== Ошибка ====== */
 .login__error {
   display: flex;
   align-items: center;
@@ -248,7 +241,6 @@ function fillDemo(role: string) {
   flex-shrink: 0;
 }
 
-/* ====== Кнопка ====== */
 .login__btn {
   width: 100%;
   padding: 12px;
@@ -276,7 +268,6 @@ function fillDemo(role: string) {
   cursor: not-allowed;
 }
 
-/* ====== Спиннер ====== */
 .login__spinner {
   width: 18px;
   height: 18px;
@@ -292,7 +283,6 @@ function fillDemo(role: string) {
   }
 }
 
-/* ====== Демо-доступы ====== */
 .login__demo {
   margin-top: 24px;
   padding-top: 20px;

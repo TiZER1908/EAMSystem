@@ -1,7 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Component } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+
+import IconLogo from '@/assets/logo.svg?component'
+
+import IconDashboard from '@/assets/icons/dashboard.svg?component'
+import IconAssets from '@/assets/icons/assets.svg?component'
+import IconRequests from '@/assets/icons/requests.svg?component'
+import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
+import IconSpareParts from '@/assets/icons/spare-parts.svg?component'
+
+import IconReports from '@/assets/icons/reports.svg?component'
+import IconMonitoring from '@/assets/icons/monitoring.svg?component'
+
+import IconUsers from '@/assets/icons/users.svg?component'
+import IconDictionaries from '@/assets/icons/dictionaries.svg?component'
 
 const route = useRoute()
 const authStore = useAuthStore
@@ -9,7 +23,7 @@ const authStore = useAuthStore
 interface MenuItem {
   path: string
   label: string
-  icon: string
+  icon: Component
   roles: string[]
 }
 
@@ -18,7 +32,6 @@ interface MenuGroup {
   items: MenuItem[]
 }
 
-// Все пункты меню с ролями, которым они доступны
 const allGroups: MenuGroup[] = [
   {
     title: 'Основное',
@@ -26,31 +39,31 @@ const allGroups: MenuGroup[] = [
       {
         path: '/dashboard',
         label: 'Дашборд',
-        icon: '📊',
+        icon: IconDashboard,
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'],
       },
       {
         path: '/assets',
         label: 'Активы',
-        icon: '🏭',
+        icon: IconAssets,
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
       },
       {
         path: '/requests',
         label: 'Заявки',
-        icon: '📝',
+        icon: IconRequests,
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'],
       },
       {
         path: '/work-orders',
         label: 'Наряды',
-        icon: '🔧',
+        icon: IconWorkOrders,
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
       },
       {
         path: '/spare-parts',
         label: 'Запчасти',
-        icon: '📦',
+        icon: IconSpareParts,
         roles: ['ADMIN', 'MASTER'],
       },
     ],
@@ -61,13 +74,13 @@ const allGroups: MenuGroup[] = [
       {
         path: '/reports',
         label: 'Отчёты',
-        icon: '📈',
+        icon: IconReports,
         roles: ['ADMIN', 'MASTER'],
       },
       {
         path: '/monitoring',
         label: 'Мониторинг',
-        icon: '🔍',
+        icon: IconMonitoring,
         roles: ['ADMIN'],
       },
     ],
@@ -78,13 +91,13 @@ const allGroups: MenuGroup[] = [
       {
         path: '/admin/users',
         label: 'Пользователи',
-        icon: '👥',
+        icon: IconUsers,
         roles: ['ADMIN'],
       },
       {
         path: '/admin/dictionaries',
         label: 'Справочники',
-        icon: '📚',
+        icon: IconDictionaries,
         roles: ['ADMIN'],
       },
     ],
@@ -101,7 +114,6 @@ const visibleGroups = computed<MenuGroup[]>(() => {
     .filter((group) => group.items.length > 0)
 })
 
-// Проверяем, активен ли пункт (учитываем вложенные маршруты)
 const isActive = (path: string): boolean => {
   return route.path === path || route.path.startsWith(path + '/')
 }
@@ -109,13 +121,11 @@ const isActive = (path: string): boolean => {
 
 <template>
   <aside class="sidebar">
-    <!-- Логотип / название -->
     <div class="sidebar__brand">
-      <span class="sidebar__logo">⚙️</span>
+      <component :is="IconLogo" class="sidebar__logo" />
       <span class="sidebar__title">EAM System</span>
     </div>
 
-    <!-- Навигация -->
     <nav class="sidebar__nav">
       <div v-for="group in visibleGroups" :key="group.title" class="sidebar__group">
         <div class="sidebar__group-title">{{ group.title }}</div>
@@ -127,13 +137,12 @@ const isActive = (path: string): boolean => {
           class="sidebar__item"
           :class="{ 'sidebar__item--active': isActive(item.path) }"
         >
-          <span class="sidebar__icon">{{ item.icon }}</span>
+          <component :is="item.icon" class="sidebar__icon" />
           <span class="sidebar__label">{{ item.label }}</span>
         </router-link>
       </div>
     </nav>
 
-    <!-- Футер сайдбара -->
     <div class="sidebar__footer">
       <div class="sidebar__user">
         <div class="sidebar__user-avatar">
@@ -149,12 +158,11 @@ const isActive = (path: string): boolean => {
 </template>
 
 <style scoped>
-/* ====== Общие параметры ====== */
 .sidebar {
   --sidebar-width: 260px;
   --sidebar-bg: #1e293b;
   --sidebar-bg-hover: #334155;
-  --sidebar-bg-active: #3b82f6;
+  --sidebar-bg-active: #014cc5;
   --sidebar-text: #cbd5e1;
   --sidebar-text-active: #ffffff;
   --sidebar-group-title: #64748b;
@@ -174,7 +182,6 @@ const isActive = (path: string): boolean => {
   z-index: 100;
 }
 
-/* ====== Логотип ====== */
 .sidebar__brand {
   display: flex;
   align-items: center;
@@ -185,7 +192,8 @@ const isActive = (path: string): boolean => {
 }
 
 .sidebar__logo {
-  font-size: 24px;
+  width: 30px;
+  height: 30px;
   line-height: 1;
 }
 
@@ -196,7 +204,6 @@ const isActive = (path: string): boolean => {
   letter-spacing: 0.3px;
 }
 
-/* ====== Навигация ====== */
 .sidebar__nav {
   flex: 1;
   padding: 16px 0;
@@ -216,7 +223,27 @@ const isActive = (path: string): boolean => {
   color: var(--sidebar-group-title);
 }
 
-/* ====== Пункт меню ====== */
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  margin: 2px 8px;
+  border-radius: 6px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 14px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  cursor: pointer;
+}
+
+.sidebar__item:hover {
+  background: var(--sidebar-bg-hover);
+  color: var(--sidebar-text-active);
+}
+
 .sidebar__item {
   display: flex;
   align-items: center;
@@ -244,12 +271,18 @@ const isActive = (path: string): boolean => {
   font-weight: 500;
 }
 
+.sidebar__item--active:hover {
+  background: var(--sidebar-bg-active);
+  color: var(--sidebar-text-active);
+}
+
 .sidebar__icon {
-  font-size: 18px;
   line-height: 1;
   width: 22px;
+  height: 22px;
   text-align: center;
   flex-shrink: 0;
+  color: #ffffff;
 }
 
 .sidebar__label {
@@ -258,7 +291,6 @@ const isActive = (path: string): boolean => {
   text-overflow: ellipsis;
 }
 
-/* ====== Футер сайдбара ====== */
 .sidebar__footer {
   border-top: 1px solid var(--sidebar-border);
   padding: 12px 16px;
@@ -305,7 +337,6 @@ const isActive = (path: string): boolean => {
   letter-spacing: 0.5px;
 }
 
-/* ====== Скроллбар (опционально) ====== */
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }

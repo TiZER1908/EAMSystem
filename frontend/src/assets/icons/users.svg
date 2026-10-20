@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+    xmlns:se="http://svg-edit.googlecode.com"
+    se:swatches="W3siaWQiOiJCQjI2QUFDRi02M0VGLTRFQ0MtQjMyQS04Q0ZCMkMwODJGRTQiLCJuYW1lIjoiW1JlZ2lzdHJhdGlvbl0iLCJoZXgiOiIjMDAwMDAwIiwiYyI6MTAwLCJtIjoxMDAsInkiOjEwMCwiayI6MTAwfSx7ImlkIjoiNzUxNjMwOTctQkZBNC00QTlFLTlBRUEtNDMxNThEM0Y1QkU5IiwibmFtZSI6IkJsYWNrIiwiaGV4IjoiIzAwMDAwMCIsImMiOjAsIm0iOjAsInkiOjAsImsiOjEwMH1d"
+    se:swatch-order="0,*,2,*,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40">
+
+    <g>
+        <g id="User / Users_Group">
+            <path id="Vector"
+                d="m17.91915,20.87873c0,-1.96149 -2.65012,-3.55149 -5.91915,-3.55149c-3.26905,0 -5.91915,1.59 -5.91915,3.55149m16.57363,-3.55102c0,-1.45635 -1.46097,-2.70801 -3.55149,-3.25601m-17.75746,3.25601c0,-1.45635 1.46097,-2.70801 3.55149,-3.25601m14.20597,-4.75178c0.72652,-0.65029 1.18383,-1.59533 1.18383,-2.64716c0,-1.96143 -1.59,-3.55149 -3.55149,-3.55149c-0.90966,0 -1.73928,0.34195 -2.36766,0.90432m-9.47065,5.29434c-0.72658,-0.65029 -1.18383,-1.59533 -1.18383,-2.64716c0,-1.96143 1.59006,-3.55149 3.55149,-3.55149c0.9096,0 1.73933,0.34195 2.36766,0.90432m2.36766,9.75016c-1.96149,0 -3.55149,-1.59 -3.55149,-3.55149c0,-1.96143 1.59,-3.55149 3.55149,-3.55149c1.96149,0 3.55149,1.59006 3.55149,3.55149c0,1.96149 -1.59,3.55149 -3.55149,3.55149z"
+                stroke="currentColor" stroke-width="2.367661561307831" stroke-linecap="round"
+                stroke-linejoin="round" se:stroke-swatch="75163097-BFA4-4A9E-9AEA-43158D3F5BE9" />
+        </g>
+    </g>
+</svg>

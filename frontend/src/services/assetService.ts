@@ -224,7 +224,6 @@ export const assetService = {
       filtered = filtered.filter((a) => a.status === filter.status)
     }
 
-    // Пагинация
     const start = (filter.page - 1) * filter.size
     const content = filtered.slice(start, start + filter.size)
 

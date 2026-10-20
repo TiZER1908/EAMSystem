@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+    xmlns:se="http://svg-edit.googlecode.com"
+    se:swatches="W3siaWQiOiI0NzE3QjAyOC0zQTYxLTQzNDEtQjhGRi00RjEzQjcxOEFCQkUiLCJuYW1lIjoiW1JlZ2lzdHJhdGlvbl0iLCJoZXgiOiIjMDAwMDAwIiwiYyI6MTAwLCJtIjoxMDAsInkiOjEwMCwiayI6MTAwfSx7ImlkIjoiNTQ1MDYyRjgtNDExRS00MzQzLUJGQUYtOUZCNkMyQzlBOTNDIiwibmFtZSI6IkJsYWNrIiwiaGV4IjoiIzAwMDAwMCIsImMiOjAsIm0iOjAsInkiOjAsImsiOjEwMH1d"
+    se:swatch-order="0,*,2,*,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40">
+
+
+    <g>
+        <rect x="1.1666970271625712" y="1.1666970271625718" width="21.673232682604755"
+            height="21.666605945674863" fill="none" stroke="currentColor"
+            stroke-width="2.3333940543251424" rx="2.792337298419123" ry="2.7440239880897814" />
+        <g id="svg_1">
+            <line x1="5.745042492917847" y1="16.317280453257798" x2="10.368271954674222"
+                y2="10.810198300283291" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" />
+            <line x1="10.368271954674222" y1="10.810198300283291" x2="12.951841359773374"
+                y2="13.971671388101988" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" />
+            <line x1="13.070750754480319" y1="13.954744996227904" x2="18.30587823323386"
+                y2="7.427832814924787" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" />
+        </g>
+    </g>
+</svg>

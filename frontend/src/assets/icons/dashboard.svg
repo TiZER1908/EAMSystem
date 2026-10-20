@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+    xmlns:se="http://svg-edit.googlecode.com"
+    se:swatches="W3siaWQiOiJGRkUwN0FBRS1DMzUxLTRCRTUtQTU0MC04QTlEMjY3NjY0QUMiLCJuYW1lIjoiQmxhY2siLCJoZXgiOiIjMDAwMDAwIiwiYyI6MCwibSI6MCwieSI6MCwiayI6MTAwfV0="
+    se:swatch-order="0,1,2,*,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40">
+
+
+    <g>
+        <path
+            d="m13.31133,12c0,-0.73648 0.59589,-1.33347 1.33101,-1.33347h6.65505c0.73512,0 1.33101,0.59699 1.33101,1.33347v9.33429c0,0.73648 -0.59589,1.33347 -1.33101,1.33347h-6.65505c-0.73512,0 -1.33101,-0.59699 -1.33101,-1.33347v-9.33429z"
+            stroke="#EF4444" stroke-width="2.664479361318894" stroke-linecap="round" id="svg_1"
+            se:stroke-swatch="FFE07AAE-C351-4BE5-A540-8A9D267664AC" fill="none" />
+        <path
+            d="m1.33224,2.66571c0,-0.73645 0.59592,-1.33347 1.33101,-1.33347h5.32404c0.73509,0 1.33101,0.59702 1.33101,1.33347v9.33429c0,0.73648 -0.59592,1.33347 -1.33101,1.33347h-5.32404c-0.73509,0 -1.33101,-0.59699 -1.33101,-1.33347v-9.33429z"
+            stroke="#3B82F6" stroke-width="2.664479361318894" stroke-linecap="round" id="svg_2"
+            se:stroke-swatch="FFE07AAE-C351-4BE5-A540-8A9D267664AC" fill="none" />
+        <path
+            d="m1.33224,18.66735c0,-0.73648 0.59592,-1.33347 1.33101,-1.33347h5.32404c0.73509,0 1.33101,0.59699 1.33101,1.33347v2.66694c0,0.73648 -0.59592,1.33347 -1.33101,1.33347h-5.32404c-0.73509,0 -1.33101,-0.59699 -1.33101,-1.33347v-2.66694z"
+            stroke="#10B981" stroke-width="2.664479361318894" stroke-linecap="round" id="svg_3"
+            se:stroke-swatch="FFE07AAE-C351-4BE5-A540-8A9D267664AC" fill="none" />
+        <path
+            d="m13.31133,2.66571c0,-0.73645 0.59589,-1.33347 1.33101,-1.33347h6.65505c0.73512,0 1.33101,0.59702 1.33101,1.33347v2.66694c0,0.73645 -0.59589,1.33347 -1.33101,1.33347h-6.65505c-0.73512,0 -1.33101,-0.59702 -1.33101,-1.33347v-2.66694z"
+            stroke="#F59E0B" stroke-width="2.664479361318894" stroke-linecap="round" id="svg_4"
+            se:stroke-swatch="FFE07AAE-C351-4BE5-A540-8A9D267664AC" fill="none" />
+    </g>
+</svg>

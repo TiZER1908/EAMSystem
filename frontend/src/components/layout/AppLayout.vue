@@ -21,8 +21,8 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 }
 
 .app-layout__content {
-  margin-left: 260px; /* ширина сайдбара */
-  margin-top: 64px; /* высота хедера */
+  margin-left: 260px;
+  margin-top: 64px;
   padding: 24px;
   min-height: calc(100vh - 64px);
 }

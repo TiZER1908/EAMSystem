@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import IconSettings from '@/assets/icons/spare-parts.svg?component'
+import IconUser from '@/assets/icons/user.svg?component'
+import IconLogout from '@/assets/icons/logout.svg?component'
+import IconNotification from '@/assets/icons/notification.svg?component'
 
 const authStore = useAuthStore
-// =============================================
 
 const isProfileMenuOpen = ref(false)
 
-// Уведомления (заглушка)
 const notifications = ref([
   { id: 1, text: 'Новая заявка на ремонт', time: '5 мин назад', unread: true },
   { id: 2, text: 'Наряд №42 просрочен', time: '1 час назад', unread: true },
@@ -30,16 +32,13 @@ function closeProfileMenu() {
 
 <template>
   <header class="header">
-    <!-- Левая часть: заголовок / breadcrumbs -->
     <div class="header__left">
       <h1 class="header__page-title">Панель управления</h1>
     </div>
 
-    <!-- Правая часть: уведомления + профиль -->
     <div class="header__right">
-      <!-- Уведомления -->
       <button class="header__icon-btn" title="Уведомления">
-        <span class="header__icon">🔔</span>
+        <component :is="IconNotification" class="header__icon" />
         <span v-if="unreadCount > 0" class="header__badge">{{ unreadCount }}</span>
       </button>
 
@@ -58,26 +57,24 @@ function closeProfileMenu() {
           >
         </button>
 
-        <!-- Выпадающее меню -->
         <div v-if="isProfileMenuOpen" class="header__dropdown">
           <router-link to="/profile" class="header__dropdown-item" @click="closeProfileMenu">
-            <span class="header__dropdown-icon">👤</span>
+            <component :is="IconUser" class="header__dropdown-icon" />
             Профиль
           </router-link>
           <router-link to="/settings" class="header__dropdown-item" @click="closeProfileMenu">
-            <span class="header__dropdown-icon">⚙️</span>
+            <component :is="IconSettings" class="header__dropdown-icon" />
             Настройки
           </router-link>
           <div class="header__dropdown-divider"></div>
           <button class="header__dropdown-item header__dropdown-item--danger" @click="handleLogout">
-            <span class="header__dropdown-icon">🚪</span>
+            <component :is="IconLogout" class="header__dropdown-icon" />
             Выйти
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Overlay для закрытия меню кликом вне -->
     <div v-if="isProfileMenuOpen" class="header__overlay" @click="closeProfileMenu"></div>
   </header>
 </template>
@@ -109,7 +106,6 @@ function closeProfileMenu() {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* ====== Левая часть ====== */
 .header__left {
   display: flex;
   align-items: center;
@@ -123,14 +119,12 @@ function closeProfileMenu() {
   margin: 0;
 }
 
-/* ====== Правая часть ====== */
 .header__right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* ====== Иконка-кнопка (уведомления) ====== */
 .header__icon-btn {
   position: relative;
   width: 40px;
@@ -150,7 +144,8 @@ function closeProfileMenu() {
 }
 
 .header__icon {
-  font-size: 20px;
+  width: 25px;
+  height: 25px;
   line-height: 1;
 }
 
@@ -172,7 +167,6 @@ function closeProfileMenu() {
   line-height: 1;
 }
 
-/* ====== Профиль ====== */
 .header__profile {
   position: relative;
 }
@@ -241,7 +235,6 @@ function closeProfileMenu() {
   transform: rotate(180deg);
 }
 
-/* ====== Выпадающее меню ====== */
 .header__dropdown {
   position: absolute;
   top: calc(100% + 8px);
@@ -288,6 +281,7 @@ function closeProfileMenu() {
 .header__dropdown-icon {
   font-size: 16px;
   width: 20px;
+  height: 20px;
   text-align: center;
 }
 
@@ -297,7 +291,6 @@ function closeProfileMenu() {
   margin: 6px 4px;
 }
 
-/* ====== Overlay для закрытия меню ====== */
 .header__overlay {
   position: fixed;
   inset: 0;

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	viewBox="0 0 32 32" xml:space="preserve" xmlns:se="http://svg-edit.googlecode.com"
+	se:swatches="W3siaWQiOiJFRDMyOUJCQS1CMTg1LTRDRjAtODQ0Ny1EMDVCQkUxMjZCNjciLCJuYW1lIjoiW1JlZ2lzdHJhdGlvbl0iLCJoZXgiOiIjMDAwMDAwIiwiYyI6MTAwLCJtIjoxMDAsInkiOjEwMCwiayI6MTAwfSx7ImlkIjoiMzZGNDVERjYtOTUwNS00REZGLUE0RDgtNzhCNkY1QjU5NzFEIiwibmFtZSI6IkJsYWNrIiwiaGV4IjoiIzAwMDAwMCIsImMiOjAsIm0iOjAsInkiOjAsImsiOjEwMH1d"
+	se:swatch-order="0,*,2,*,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40">
+<g><path d="m13.02463,22.35549l9.35116,-9.32138c2.18599,0.8474 4.7363,0.36317 6.55796,-1.33163s2.18599,-4.35805 1.33588,-6.53707l-2.91465,2.90537l-2.67176,-0.72634l-0.72866,-2.66325l2.91465,-2.90537c-2.18599,-0.8474 -4.7363,-0.36317 -6.55796,1.33163s-2.18599,4.35805 -1.33588,6.53707l-9.35116,9.32138c-2.18599,-0.8474 -4.7363,-0.36317 -6.55796,1.33163s-2.18599,4.35805 -1.33588,6.53707l2.91465,-2.90537l2.67176,0.72634l0.72866,2.66325l-2.91465,2.90537c2.18599,0.8474 4.7363,0.36317 6.55796,-1.33163s2.18599,-4.35805 1.33588,-6.53707z" stroke-linejoin="round" stroke-width="2.425002434317218" stroke-miterlimit="10" stroke="currentColor" fill="none" id="svg_1" se:stroke-swatch="36F45DF6-9505-4DFF-A4D8-78B6F5B5971D"/></g></svg>

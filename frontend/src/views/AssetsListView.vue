@@ -12,7 +12,6 @@ const assets = ref<Asset[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
-// Фильтры
 const search = ref('')
 const statusFilter = ref<AssetStatus | 'ALL'>('ALL')
 const page = ref(1)

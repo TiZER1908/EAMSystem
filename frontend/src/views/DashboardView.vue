@@ -12,14 +12,12 @@ import {
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
-// ====== Состояние ======
 const kpiCards = ref<KpiCard[]>([])
 const recentRequests = ref<RecentRequest[]>([])
 const events = ref<EventItem[]>([])
 const systemStatus = ref<SystemStatusItem[]>([])
 const loading = ref(true)
 
-// ====== Загрузка данных при монтировании ======
 onMounted(async () => {
   loading.value = true
   try {
@@ -30,7 +28,6 @@ onMounted(async () => {
       dashboardService.getSystemStatus(),
     ])
 
-    // Фильтруем KPI-карточки по роли
     kpiCards.value = kpi.filter((card) => card.roles.includes(role.value))
 
     recentRequests.value = requests
@@ -41,7 +38,6 @@ onMounted(async () => {
   }
 })
 
-// ====== Приветствие по времени суток ======
 const greeting = computed(() => {
   const hour = new Date().getHours()
   if (hour < 6) return 'Доброй ночи'
@@ -59,7 +55,6 @@ const today = computed(() =>
   }),
 )
 
-// ====== Хелперы для бейджей ======
 function statusLabel(status: string): string {
   const map: Record<string, string> = {
     NEW: 'Новая',
@@ -83,17 +78,14 @@ function priorityLabel(priority: string): string {
 
 <template>
   <div class="dashboard">
-    <!-- ====== Приветствие ====== -->
     <div class="dashboard__welcome">
       <h1 class="dashboard__greeting">{{ greeting }}, {{ authStore.user.fullName }}!</h1>
       <p class="dashboard__date">{{ today }}</p>
     </div>
 
-    <!-- ====== Загрузка ====== -->
     <div v-if="loading" class="dashboard__loading">Загрузка данных...</div>
 
     <template v-else>
-      <!-- ====== KPI-карточки ====== -->
       <div class="dashboard__kpi-grid">
         <div
           v-for="card in kpiCards"
@@ -101,7 +93,11 @@ function priorityLabel(priority: string): string {
           class="kpi-card"
           :class="`kpi-card--${card.color}`"
         >
-          <div class="kpi-card__icon">{{ card.icon }}</div>
+          <component
+            :is="card.icon"
+            class="kpi-card__icon"
+            :class="`kpi-card--${card.color}__icon`"
+          />
           <div class="kpi-card__body">
             <div class="kpi-card__value">{{ card.value }}</div>
             <div class="kpi-card__label">{{ card.label }}</div>
@@ -110,9 +106,7 @@ function priorityLabel(priority: string): string {
         </div>
       </div>
 
-      <!-- ====== Две колонки ====== -->
       <div class="dashboard__columns">
-        <!-- Последние заявки -->
         <section class="card">
           <div class="card__header">
             <h2 class="card__title">Последние заявки</h2>
@@ -141,7 +135,6 @@ function priorityLabel(priority: string): string {
           </div>
         </section>
 
-        <!-- Лента событий -->
         <section class="card">
           <div class="card__header">
             <h2 class="card__title">Лента событий</h2>
@@ -161,7 +154,6 @@ function priorityLabel(priority: string): string {
         </section>
       </div>
 
-      <!-- ====== Состояние системы (только для админа) ====== -->
       <section v-if="role === 'ADMIN'" class="card">
         <div class="card__header">
           <h2 class="card__title">Состояние системы</h2>
@@ -219,7 +211,6 @@ function priorityLabel(priority: string): string {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* ====== KPI ====== */
 .dashboard__kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -251,9 +242,24 @@ function priorityLabel(priority: string): string {
 }
 
 .kpi-card__icon {
+  width: 30px;
+  height: 30px;
   font-size: 32px;
   line-height: 1;
   flex-shrink: 0;
+}
+
+.kpi-card--blue__icon {
+  color: #3b82f6;
+}
+.kpi-card--orange__icon {
+  color: #f59e0b;
+}
+.kpi-card--green__icon {
+  color: #10b981;
+}
+.kpi-card--red__icon {
+  color: #ef4444;
 }
 
 .kpi-card__body {
@@ -281,7 +287,6 @@ function priorityLabel(priority: string): string {
   margin-top: 2px;
 }
 
-/* ====== Колонки ====== */
 .dashboard__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -294,7 +299,6 @@ function priorityLabel(priority: string): string {
   }
 }
 
-/* ====== Карточка ====== */
 .card {
   background: #fff;
   border-radius: 12px;
@@ -332,7 +336,6 @@ function priorityLabel(priority: string): string {
   padding: 8px 0;
 }
 
-/* ====== Заявка ====== */
 .request-row {
   display: flex;
   align-items: center;
@@ -382,7 +385,6 @@ function priorityLabel(priority: string): string {
   flex-shrink: 0;
 }
 
-/* ====== Бейджи ====== */
 .badge {
   display: inline-block;
   padding: 3px 8px;
@@ -426,7 +428,6 @@ function priorityLabel(priority: string): string {
   color: #991b1b;
 }
 
-/* ====== Событие ====== */
 .event-row {
   display: flex;
   gap: 12px;
@@ -484,7 +485,6 @@ function priorityLabel(priority: string): string {
   margin-top: 2px;
 }
 
-/* ====== Состояние системы ====== */
 .system-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

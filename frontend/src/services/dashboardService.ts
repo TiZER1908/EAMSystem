@@ -1,9 +1,15 @@
+import { type Component } from 'vue'
+import IconAssets from '@/assets/icons/assets.svg?component'
+import IconRequests from '@/assets/icons/requests.svg?component'
+import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
+import IconAlert from '@/assets/icons/alert.svg?component'
+
 export interface KpiCard {
   id: string
   label: string
   value: number
   subtitle: string
-  icon: string
+  icon: Component
   color: 'blue' | 'orange' | 'green' | 'red'
   roles: string[]
 }
@@ -42,7 +48,7 @@ export const dashboardService = {
         label: 'Активы',
         value: 247,
         subtitle: 'всего на балансе',
-        icon: '🏭',
+        icon: IconAssets,
         color: 'blue',
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
       },
@@ -51,7 +57,7 @@ export const dashboardService = {
         label: 'Открытые заявки',
         value: 12,
         subtitle: 'ожидают обработки',
-        icon: '📝',
+        icon: IconRequests,
         color: 'orange',
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'],
       },
@@ -60,7 +66,7 @@ export const dashboardService = {
         label: 'Наряды в работе',
         value: 8,
         subtitle: 'выполняются сейчас',
-        icon: '🔧',
+        icon: IconWorkOrders,
         color: 'green',
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
       },
@@ -69,7 +75,7 @@ export const dashboardService = {
         label: 'Просрочено',
         value: 3,
         subtitle: 'требуют внимания',
-        icon: '⚠️',
+        icon: IconAlert,
         color: 'red',
         roles: ['ADMIN', 'MASTER'],
       },
@@ -131,35 +137,35 @@ export const dashboardService = {
     return [
       {
         id: 1,
-        icon: '🔧',
+        icon: '',
         text: 'Иванов закрыл наряд №42 (Станок ЧПУ-3)',
         time: '10 мин назад',
         type: 'success',
       },
       {
         id: 2,
-        icon: '📝',
+        icon: '',
         text: 'Петров подал заявку на ремонт (Компрессор К-1)',
         time: '25 мин назад',
         type: 'info',
       },
       {
         id: 3,
-        icon: '⚙️',
+        icon: '',
         text: 'Failover кластера БД выполнен успешно',
         time: '1 час назад',
         type: 'warning',
       },
       {
         id: 4,
-        icon: '👤',
+        icon: '',
         text: 'Добавлен новый пользователь: master2',
         time: '2 часа назад',
         type: 'info',
       },
       {
         id: 5,
-        icon: '📦',
+        icon: '',
         text: 'Списано 2 шт. запчасти "Подшипник 6204"',
         time: '3 часа назад',
         type: 'info',
