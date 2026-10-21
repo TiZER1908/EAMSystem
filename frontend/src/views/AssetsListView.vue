@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { assetService, type Asset, type AssetStatus } from '@/services/assetService'
+import { assetService } from '@/services/assetService'
+import type { Asset, AssetStatus } from '@/services/models.ts'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)

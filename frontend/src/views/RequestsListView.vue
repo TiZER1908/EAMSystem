@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import {
-  requestService,
-  type Request,
-  type RequestStatus,
-  type RequestPriority,
-} from '@/services/requestService'
+import { requestService } from '@/services/requestService'
+import type { Request, RequestStatus, RequestPriority } from '@/services/models.ts'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)

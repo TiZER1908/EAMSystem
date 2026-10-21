@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { sparePartService, type SparePart, type SparePartStatus } from '@/services/sparePartService'
+import { sparePartService } from '@/services/sparePartService'
+import type { SparePart, SparePartStatus } from '@/services/models.ts'
 
 import IconEdit from '@/assets/icons/edit.svg?component'
 import IconArchive from '@/assets/icons/archive.svg?component'

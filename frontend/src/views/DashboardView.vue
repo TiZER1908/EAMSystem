@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import {
-  dashboardService,
-  type KpiCard,
-  type RecentRequest,
-  type EventItem,
-  type SystemStatusItem,
-} from '@/services/dashboardService'
+import { dashboardService } from '@/services/dashboardService'
+import type { KpiCard, RecentRequest, EventItem, SystemStatusItem } from '@/services/models.ts'
+
+import IconAssets from '@/assets/icons/assets.svg?component'
+import IconRequests from '@/assets/icons/requests.svg?component'
+import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
+import IconAlert from '@/assets/icons/alert.svg?component'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
@@ -58,9 +58,11 @@ const today = computed(() =>
 function statusLabel(status: string): string {
   const map: Record<string, string> = {
     NEW: 'Новая',
+    ACCEPTED: 'Принята',
     IN_PROGRESS: 'В работе',
     CLOSED: 'Закрыта',
     REJECTED: 'Отклонена',
+    CANCELLED: 'Отменена',
   }
   return map[status] ?? status
 }
@@ -94,9 +96,28 @@ function priorityLabel(priority: string): string {
           :class="`kpi-card--${card.color}`"
         >
           <component
-            :is="card.icon"
+            v-if="card.id == 'assets'"
+            :is="IconAssets"
             class="kpi-card__icon"
-            :class="`kpi-card--${card.color}__icon`"
+            :class="`kpi-card--blue__icon`"
+          />
+          <component
+            v-if="card.id == 'requests'"
+            :is="IconRequests"
+            class="kpi-card__icon"
+            :class="`kpi-card--orange__icon`"
+          />
+          <component
+            v-if="card.id == 'work-orders'"
+            :is="IconWorkOrders"
+            class="kpi-card__icon"
+            :class="`kpi-card--green__icon`"
+          />
+          <component
+            v-if="card.id == 'overdue'"
+            :is="IconAlert"
+            class="kpi-card__icon"
+            :class="`kpi-card--red__icon`"
           />
           <div class="kpi-card__body">
             <div class="kpi-card__value">{{ card.value }}</div>
@@ -415,6 +436,10 @@ function priorityLabel(priority: string): string {
   background: #dbeafe;
   color: #1e40af;
 }
+.badge--status-accepted {
+  background: #e0e7ff;
+  color: #3730a3;
+}
 .badge--status-in_progress {
   background: #fef3c7;
   color: #92400e;
@@ -426,6 +451,10 @@ function priorityLabel(priority: string): string {
 .badge--status-rejected {
   background: #fee2e2;
   color: #991b1b;
+}
+.badge--status-cancelled {
+  background: #f1f5f9;
+  color: #64748b;
 }
 
 .event-row {
