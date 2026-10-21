@@ -42,6 +42,16 @@ export const userService = {
     return user as User
   },
 
+  async getUserByUsername(username: string): Promise<User> {
+    // const { data } = await api.get<User>(`/users/${id}`)
+    // return data
+
+    await new Promise((r) => setTimeout(r, 200))
+    const user = MOCK_USERS.find((u) => u.username === username)
+    if (!user) throw new Error('User not found')
+    return user as User
+  },
+
   async updateUser(id: number, payload: Partial<User>): Promise<User> {
     // const { data } = await api.put<User>(`/users/${id}`, payload)
     // return data
@@ -57,6 +67,22 @@ export const userService = {
 
   async unblockUser(id: number): Promise<void> {
     // await api.patch(`/users/${id}/unblock`)
+    await new Promise((r) => setTimeout(r, 300))
+  },
+
+  async updateProfile(id: number, payload: Partial<User>): Promise<User> {
+    // const { data } = await api.put<User>(`/users/${id}/profile`, payload)
+    // return data
+
+    await new Promise((r) => setTimeout(r, 300))
+    return { ...payload, id } as User
+  },
+
+  async changePassword(
+    id: number,
+    payload: { currentPassword: string; newPassword: string },
+  ): Promise<void> {
+    // await api.post(`/users/${id}/change-password`, payload)
     await new Promise((r) => setTimeout(r, 300))
   },
 }

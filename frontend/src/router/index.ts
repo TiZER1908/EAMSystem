@@ -16,6 +16,7 @@ const ProfileView = () => import('@/views/ProfileView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
 const LoginView = () => import('@/views/LoginView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
+const ProfileEditView = () => import('@/views/ProfileEditView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -90,6 +91,13 @@ const routes: RouteRecordRaw[] = [
         name: 'profile',
         component: ProfileView,
         meta: { title: 'Профиль', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+      },
+      {
+        path: 'profile/edit',
+        component: ProfileEditView,
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: 'settings',

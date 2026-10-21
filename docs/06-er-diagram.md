@@ -20,6 +20,7 @@
    - `asset_history` — история конкретного актива (видна в карточке).
    - `audit_log` — общий журнал всех действий (виден только Администратору).
 5. **Вложения** (фото) хранятся в файловой системе, в БД — только метаданные (`file_path`, `file_size`, `content_type`).
+6. **Мягкое удаление (Soft Delete)** используется для ключевых сущностей: `users`, `assets`, `requests`, `work_orders`, `spare_parts`, а также для вложений, задач наряда, запчастей в наряде и комментариев. Это сохраняет ссылочную целостность и историю. Поля: `is_deleted` (BOOLEAN, NOT NULL, default false), `deleted_at` (TIMESTAMP, NULL), `deleted_by` (BIGINT, FK → users, NULL).
 
 ## Сущности
 
@@ -33,10 +34,15 @@
 | `username` | VARCHAR(50) | UNIQUE, NOT NULL | Логин |
 | `email` | VARCHAR(255) | UNIQUE, NOT NULL | Email |
 | `password_hash` | VARCHAR(255) | NOT NULL | Bcrypt-хэш пароля |
-| `full_name` | VARCHAR(255) | NOT NULL | ФИО |
+| `last_name` | VARCHAR(100) | NOT NULL | Фамилия |
+| `first_name` | VARCHAR(100) | NOT NULL | Имя |
+| `middle_name` | VARCHAR(100) | NULL | Отчество (может отсутствовать) |
 | `phone` | VARCHAR(20) | NULL | Телефон |
 | `role` | VARCHAR(20) | NOT NULL | `ADMIN`, `MASTER`, `TECHNICIAN`, `REQUESTER` |
 | `status` | VARCHAR(20) | NOT NULL | `ACTIVE`, `BLOCKED` |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
 
@@ -88,6 +94,9 @@
 | `location_id` | BIGINT | FK → locations, NOT NULL | Местоположение |
 | `responsible_user_id` | BIGINT | FK → users, NULL | Ответственный сотрудник |
 | `status` | VARCHAR(20) | NOT NULL | `ACTIVE`, `UNDER_REPAIR`, `INACTIVE`, `DECOMMISSIONED` |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
 
@@ -102,6 +111,9 @@
 | `priority` | VARCHAR(20) | NOT NULL | `LOW`, `NORMAL`, `HIGH`, `CRITICAL` |
 | `status` | VARCHAR(20) | NOT NULL | `NEW`, `ACCEPTED`, `IN_PROGRESS`, `CLOSED`, `REJECTED`, `CANCELLED` |
 | `rejection_reason` | TEXT | NULL | Причина отклонения |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
 
@@ -115,6 +127,9 @@
 | `file_path` | VARCHAR(500) | NOT NULL | Путь к файлу |
 | `file_size` | BIGINT | NOT NULL | Размер в байтах |
 | `content_type` | VARCHAR(100) | NOT NULL | MIME-тип |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата загрузки |
 
 #### work_orders (Наряды)
@@ -132,6 +147,9 @@
 | `actual_start_date` | TIMESTAMP | NULL | Фактическая дата начала |
 | `actual_end_date` | TIMESTAMP | NULL | Фактическая дата завершения |
 | `cancel_reason` | TEXT | NULL | Причина отмены |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
 
@@ -146,6 +164,9 @@
 | `is_completed` | BOOLEAN | NOT NULL, default false | Выполнена ли работа |
 | `completed_at` | TIMESTAMP | NULL | Дата выполнения |
 | `sort_order` | INT | NOT NULL | Порядок сортировки |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 
 #### work_order_attachments (Вложения нарядов)
 
@@ -157,6 +178,9 @@
 | `file_path` | VARCHAR(500) | NOT NULL | Путь к файлу |
 | `file_size` | BIGINT | NOT NULL | Размер в байтах |
 | `content_type` | VARCHAR(100) | NOT NULL | MIME-тип |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата загрузки |
 
 #### spare_parts (Запчасти)
@@ -170,6 +194,9 @@
 | `unit_id` | BIGINT | FK → units, NULL | Единица измерения |
 | `stock_quantity` | INT | NOT NULL, default 0 | Остаток на складе |
 | `status` | VARCHAR(20) | NOT NULL | `ACTIVE`, `ARCHIVED` |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
 
@@ -183,6 +210,9 @@
 | `planned_quantity` | INT | NULL | Запланированное количество |
 | `actual_quantity` | INT | NULL | Фактически использованное количество |
 | `is_planned` | BOOLEAN | NOT NULL, default true | Запланирована или фактическая |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 
 ### Вспомогательные сущности
 
@@ -195,6 +225,9 @@
 | `request_id` | BIGINT | FK → requests, NULL | Заявка (полиморфная) |
 | `work_order_id` | BIGINT | FK → work_orders, NULL | Наряд (полиморфная) |
 | `text` | TEXT | NOT NULL | Текст комментария |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 
 **Ограничение:** ровно одно из полей `request_id` или `work_order_id` должно быть NOT NULL (проверка на уровне БД через `CHECK`).

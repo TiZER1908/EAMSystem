@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { userService } from '@/services/userService'
+import { MOCK_USERS } from '@/services/mockData'
+import type { User } from '@/services/models.ts'
 import IconLogo from '@/assets/logo.svg?component'
 
 const router = useRouter()
@@ -9,13 +12,7 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const error = ref<string | null>(null)
-
-const MOCK_USERS = [
-  { username: 'admin', password: 'admin', role: 'ADMIN', fullName: 'Администратор Системы' },
-  { username: 'master', password: 'master', role: 'MASTER', fullName: 'Иванов Иван' },
-  { username: 'tech', password: 'tech', role: 'TECHNICIAN', fullName: 'Петров Пётр' },
-  { username: 'user', password: 'user', role: 'REQUESTER', fullName: 'Сидоров Сидор' },
-]
+const profile = ref<User | null>(null)
 
 async function handleLogin() {
   error.value = null
@@ -29,23 +26,21 @@ async function handleLogin() {
 
   await new Promise((r) => setTimeout(r, 500))
 
-  const found = MOCK_USERS.find(
-    (u) => u.username === username.value && u.password === password.value,
-  )
-
-  if (!found) {
-    error.value = 'Неверный логин или пароль'
+  try {
+    profile.value = await userService.getUserByUsername(username.value)
+  } catch {
+    error.value = 'Пользователь не найден'
+  } finally {
     loading.value = false
-    return
   }
 
   localStorage.setItem(
     'eam_user',
     JSON.stringify({
-      id: 1,
-      username: found.username,
-      fullName: found.fullName,
-      role: found.role,
+      id: profile.value?.id,
+      username: profile.value?.username,
+      fullName: profile.value?.fullName,
+      role: profile.value?.role,
     }),
   )
   localStorage.setItem('eam_token', 'fake-jwt-token')
@@ -58,7 +53,7 @@ function fillDemo(role: string) {
   const user = MOCK_USERS.find((u) => u.role === role)
   if (user) {
     username.value = user.username
-    password.value = user.password
+    password.value = '123'
   }
 }
 </script>
