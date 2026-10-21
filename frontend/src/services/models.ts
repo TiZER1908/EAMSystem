@@ -9,7 +9,13 @@ export type WorkOrderStatus =
 export type DictionaryType =
   'ASSET_TYPES' | 'DEPARTMENTS' | 'LOCATIONS' | 'UNITS' | 'SPARE_PART_CATEGORIES'
 
-export interface Asset {
+export interface BaseEntity {
+  isDeleted: boolean
+  deletedAt: string | null
+  deletedBy: number | null
+}
+
+export interface Asset extends BaseEntity {
   id: number
   inventoryNumber: string
   name: string
@@ -42,8 +48,8 @@ export interface RecentRequest {
   id: number
   asset: string
   author: string
-  status: 'NEW' | 'ACCEPTED' | 'IN_PROGRESS' | 'CLOSED' | 'REJECTED' | 'CANCELLED'
-  priority: 'LOW' | 'NORMAL' | 'HIGH' | 'CRITICAL'
+  status: RequestStatus
+  priority: RequestPriority
   time: string
 }
 
@@ -125,7 +131,7 @@ export interface ReportData {
   rows: string[][]
 }
 
-export interface Request {
+export interface Request extends BaseEntity {
   id: number
   assetName: string
   inventoryNumber: string
@@ -133,6 +139,7 @@ export interface Request {
   description: string
   priority: RequestPriority
   status: RequestStatus
+  rejectionReason: string | null
   createdAt: string
 }
 
@@ -144,7 +151,7 @@ export interface RequestFilter {
   size: number
 }
 
-export interface SparePart {
+export interface SparePart extends BaseEntity {
   id: number
   name: string
   article: string
@@ -161,11 +168,14 @@ export interface SparePartFilter {
   size: number
 }
 
-export interface User {
+export interface User extends BaseEntity {
   id: number
   username: string
-  fullName: string
   email: string
+  lastName: string
+  firstName: string
+  middleName: string | null
+  phone: string | null
   role: UserRole
   status: UserStatus
   createdAt: string
@@ -178,7 +188,7 @@ export interface UserFilter {
   size: number
 }
 
-export interface WorkOrder {
+export interface WorkOrder extends BaseEntity {
   id: number
   requestId: number | null
   assetName: string
@@ -188,6 +198,9 @@ export interface WorkOrder {
   status: WorkOrderStatus
   plannedStartDate: string
   plannedEndDate: string
+  actualStartDate: string | null
+  actualEndDate: string | null
+  cancelReason: string | null
   createdAt: string
 }
 

@@ -162,7 +162,11 @@ async function toggleBlock(user: User) {
             </tr>
             <tr v-for="user in users" :key="user.id" class="table-row">
               <td class="table-cell--mono">{{ user.username }}</td>
-              <td class="table-cell--bold">{{ user.fullName }}</td>
+              <td class="table-cell--bold">
+                <router-link :to="`/users/${user.id}`" class="user-link">
+                  {{ [user.lastName, user.firstName, user.middleName].filter(Boolean).join(' ') }}
+                </router-link>
+              </td>
               <td>{{ user.email }}</td>
               <td>
                 <span class="badge" :class="`badge--role-${user.role.toLowerCase()}`">

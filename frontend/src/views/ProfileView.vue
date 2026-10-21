@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { userService } from '@/services/userService'
 import type { User } from '@/services/models.ts'
@@ -8,7 +8,6 @@ import type { User } from '@/services/models.ts'
 import IconEdit from '@/assets/icons/edit.svg?component'
 
 const route = useRoute()
-const router = useRouter()
 const authStore = useAuthStore
 
 const currentUserRole = computed(() => authStore.user.role)
@@ -26,7 +25,7 @@ const targetUserId = computed(() => {
 const isOwnProfile = computed(() => targetUserId.value === currentUserId.value)
 const canView = computed(() => {
   if (isOwnProfile.value) return true
-  return currentUserRole.value === 'ADMIN'
+  return ['ADMIN', 'MASTER'].includes(currentUserRole.value)
 })
 
 async function loadProfile() {
@@ -48,8 +47,12 @@ async function loadProfile() {
 
 onMounted(loadProfile)
 
-function goToEdit() {
-  router.push('/profile/edit')
+function formatFullName(user: User): string {
+  return [user.lastName, user.firstName, user.middleName].filter(Boolean).join(' ')
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('ru-RU')
 }
 
 function roleLabel(role: string): string {
@@ -65,15 +68,11 @@ function roleLabel(role: string): string {
 function statusLabel(status: string): string {
   return status === 'ACTIVE' ? 'Активен' : 'Заблокирован'
 }
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('ru-RU')
-}
 </script>
 
 <template>
   <div class="profile">
-    <div v-if="!canView" class="no-access">У вас нет доступа к просмотру чужого профиля.</div>
+    <div v-if="!canView" class="no-access">У вас нет доступа к просмотру этого профиля.</div>
 
     <div v-else-if="loading" class="profile__loading">Загрузка профиля...</div>
 
@@ -84,10 +83,10 @@ function formatDate(dateStr: string): string {
     <template v-else-if="profile">
       <div class="profile__header">
         <div class="profile__avatar">
-          {{ profile.fullName.charAt(0).toUpperCase() }}
+          {{ profile.lastName.charAt(0).toUpperCase() }}
         </div>
         <div class="profile__title-block">
-          <h1 class="profile__name">{{ profile.fullName }}</h1>
+          <h1 class="profile__name">{{ formatFullName(profile) }}</h1>
           <div class="profile__meta">
             <span class="badge" :class="`badge--role-${profile.role.toLowerCase()}`">
               {{ roleLabel(profile.role) }}
@@ -102,10 +101,10 @@ function formatDate(dateStr: string): string {
             </span>
           </div>
         </div>
-        <button v-if="isOwnProfile" class="btn btn--primary" @click="goToEdit">
+        <router-link v-if="isOwnProfile" to="/settings" class="btn btn--primary">
           <IconEdit class="btn-icon" />
           Редактировать
-        </button>
+        </router-link>
       </div>
 
       <div class="profile__layout">
@@ -123,8 +122,8 @@ function formatDate(dateStr: string): string {
               <span class="info-value">{{ profile.email }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">ФИО</span>
-              <span class="info-value">{{ profile.fullName }}</span>
+              <span class="info-label">Телефон</span>
+              <span class="info-value">{{ profile.phone || '—' }}</span>
             </div>
             <div class="info-row">
               <span class="info-label">Роль</span>
@@ -133,21 +132,6 @@ function formatDate(dateStr: string): string {
             <div class="info-row">
               <span class="info-label">Дата регистрации</span>
               <span class="info-value">{{ formatDate(profile.createdAt) }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="isOwnProfile" class="panel">
-          <div class="panel__header">
-            <h2 class="panel__title">Безопасность</h2>
-          </div>
-          <div class="panel__body">
-            <div class="info-row">
-              <span class="info-label">Пароль</span>
-              <span class="info-value">••••••••</span>
-            </div>
-            <div class="panel__action">
-              <button class="btn btn--outline">Сменить пароль</button>
             </div>
           </div>
         </div>
@@ -179,6 +163,9 @@ function formatDate(dateStr: string): string {
   padding: 40px;
   text-align: center;
   color: #94a3b8;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   font-size: 16px;
 }
 
@@ -224,14 +211,14 @@ function formatDate(dateStr: string): string {
 
 .profile__layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
   align-items: start;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1024px) {
   .profile__layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -285,10 +272,6 @@ function formatDate(dateStr: string): string {
   color: #1e293b;
 }
 
-.panel__action {
-  margin-top: 8px;
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -301,6 +284,8 @@ function formatDate(dateStr: string): string {
   border: 1px solid transparent;
   transition: background 0.15s ease;
   font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .btn--primary {
@@ -310,16 +295,6 @@ function formatDate(dateStr: string): string {
 
 .btn--primary:hover {
   background: #2563eb;
-}
-
-.btn--outline {
-  background: #fff;
-  color: #334155;
-  border-color: #e2e8f0;
-}
-
-.btn--outline:hover {
-  background: #f8fafc;
 }
 
 .btn-icon {

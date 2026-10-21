@@ -17,7 +17,9 @@ export const userService = {
       filtered = filtered.filter(
         (u) =>
           u.username.toLowerCase().includes(s) ||
-          u.fullName.toLowerCase().includes(s) ||
+          u.firstName.toLowerCase().includes(s) ||
+          u.middleName?.toLowerCase().includes(s) ||
+          u.lastName.toLowerCase().includes(s) ||
           u.email.toLowerCase().includes(s),
       )
     }

@@ -13,6 +13,7 @@ const password = ref('')
 const loading = ref(false)
 const error = ref<string | null>(null)
 const profile = ref<User | null>(null)
+const fullName = ref<string | null>(null)
 
 async function handleLogin() {
   error.value = null
@@ -28,6 +29,9 @@ async function handleLogin() {
 
   try {
     profile.value = await userService.getUserByUsername(username.value)
+    fullName.value = [profile.value.lastName, profile.value.firstName, profile.value.middleName]
+      .filter(Boolean)
+      .join(' ')
   } catch {
     error.value = 'Пользователь не найден'
   } finally {
@@ -39,7 +43,7 @@ async function handleLogin() {
     JSON.stringify({
       id: profile.value?.id,
       username: profile.value?.username,
-      fullName: profile.value?.fullName,
+      fullName: fullName.value,
       role: profile.value?.role,
     }),
   )
