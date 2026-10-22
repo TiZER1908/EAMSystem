@@ -2,19 +2,21 @@
 import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { dashboardService } from '@/services/dashboardService'
-import type { KpiCard, RecentRequest, EventItem, SystemStatusItem } from '@/services/models.ts'
+import type { KpiCard, RecentRequest, AuditEvent, SystemStatusItem } from '@/services/models.ts'
 
 import IconAssets from '@/assets/icons/assets.svg?component'
 import IconRequests from '@/assets/icons/requests.svg?component'
 import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
+
 import IconAlert from '@/assets/icons/alert.svg?component'
+import IconSuccess from '@/assets/icons/success.svg?component'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
 const kpiCards = ref<KpiCard[]>([])
 const recentRequests = ref<RecentRequest[]>([])
-const events = ref<EventItem[]>([])
+const events = ref<AuditEvent[]>([])
 const systemStatus = ref<SystemStatusItem[]>([])
 const loading = ref(true)
 
@@ -75,6 +77,27 @@ function priorityLabel(priority: string): string {
     CRITICAL: 'Критичный',
   }
   return map[priority] ?? priority
+}
+
+function actionLabel(action: string): string {
+  const map: Record<string, string> = {
+    CREATE: 'Создание',
+    UPDATE: 'Изменение',
+    DELETE: 'Удаление',
+    LOGIN: 'Вход',
+    LOGOUT: 'Выход',
+    FAILOVER: 'Failover',
+    BLOCK: 'Блокировка',
+    REJECT: 'Отклонение',
+  }
+  return map[action] ?? action
+}
+
+function actionClass(action: string): string {
+  if (['DELETE', 'FAILOVER', 'REJECT'].includes(action)) return 'error'
+  if (['CREATE'].includes(action)) return 'success'
+  if (['LOGIN', 'LOGOUT'].includes(action)) return 'info'
+  return 'warning'
 }
 </script>
 
@@ -163,12 +186,30 @@ function priorityLabel(priority: string): string {
 
           <div class="card__body">
             <div v-for="event in events" :key="event.id" class="event-row">
-              <div class="event-row__icon" :class="`event-row__icon--${event.type}`">
-                {{ event.icon }}
+              <div class="event-row__icon" :class="`event-row__icon--${actionClass(event.action)}`">
+                <IconAlert
+                  :class="`icon--${actionClass(event.action)}`"
+                  v-if="
+                    actionClass(event.action) == 'danger' || actionClass(event.action) == 'warning'
+                  "
+                />
+                <IconRequests
+                  :class="`icon--${actionClass(event.action)}`"
+                  v-if="actionClass(event.action) == 'info'"
+                />
+                <IconSuccess
+                  :class="`icon--${actionClass(event.action)}`"
+                  v-if="actionClass(event.action) == 'success'"
+                />
               </div>
               <div class="event-row__body">
-                <div class="event-row__text">{{ event.text }}</div>
-                <div class="event-row__time">{{ event.time }}</div>
+                <div class="event-row__text">{{ event.details }}</div>
+                <div class="event-row__time">2 часа назад</div>
+              </div>
+              <div class="event-row__badges">
+                <span class="badge" :class="`badge--${actionClass(event.action)}`">
+                  {{ actionLabel(event.action) }}
+                </span>
               </div>
             </div>
           </div>
@@ -406,6 +447,12 @@ function priorityLabel(priority: string): string {
   flex-shrink: 0;
 }
 
+.event-row__badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 .badge {
   display: inline-block;
   padding: 3px 8px;
@@ -457,8 +504,27 @@ function priorityLabel(priority: string): string {
   color: #64748b;
 }
 
+.badge--danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.badge--success {
+  background: #d1fae5;
+  color: #065f46;
+}
+.badge--warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+.badge--info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
 .event-row {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 12px 20px;
   border-bottom: 1px solid #f1f5f9;
@@ -495,6 +561,27 @@ function priorityLabel(priority: string): string {
 }
 .event-row__icon--error {
   background: #fee2e2;
+}
+
+.icon--success {
+  color: #065f46;
+  width: 20px;
+  height: 20px;
+}
+.icon--info {
+  color: #1e40af;
+  width: 20px;
+  height: 20px;
+}
+.icon--warning {
+  color: #92400e;
+  width: 20px;
+  height: 20px;
+}
+.icon--error {
+  color: #991b1b;
+  width: 20px;
+  height: 20px;
 }
 
 .event-row__body {

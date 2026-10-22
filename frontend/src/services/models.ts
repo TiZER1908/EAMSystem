@@ -219,3 +219,23 @@ export interface DictionaryItem {
   parentName?: string
   shortName?: string
 }
+
+export interface AuditEvent {
+  id: number
+  timestamp: string
+  user: string
+  action: string
+  entityType: string
+  entityId: number | null
+  details: string
+  ipAddress: string
+}
+
+export interface AuditEventFilter {
+  search: string
+  action: string
+  dateFrom: string
+  dateTo: string
+  page: number
+  size: number
+}

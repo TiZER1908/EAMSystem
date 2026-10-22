@@ -11,6 +11,7 @@ import IconRequests from '@/assets/icons/requests.svg?component'
 import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
 import IconSpareParts from '@/assets/icons/spare-parts.svg?component'
 
+import IconEvents from '@/assets/icons/events.svg?component'
 import IconReports from '@/assets/icons/reports.svg?component'
 import IconMonitoring from '@/assets/icons/monitoring.svg?component'
 
@@ -71,6 +72,12 @@ const allGroups: MenuGroup[] = [
   {
     title: 'Аналитика',
     items: [
+      {
+        path: '/events',
+        label: 'Журнал событий',
+        icon: IconEvents,
+        roles: ['ADMIN', 'MASTER'],
+      },
       {
         path: '/reports',
         label: 'Отчёты',

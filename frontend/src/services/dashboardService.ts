@@ -1,5 +1,5 @@
 import { type Component } from 'vue'
-import type { KpiCard, RecentRequest, EventItem, SystemStatusItem } from './models.ts'
+import type { KpiCard, RecentRequest, AuditEvent, SystemStatusItem } from './models.ts'
 import {
   MOCK_REQUESTS,
   MOCK_DASHBOARD_EVENTS,
@@ -29,7 +29,7 @@ export const dashboardService = {
     }))
   },
 
-  async getEvents(): Promise<EventItem[]> {
+  async getEvents(): Promise<AuditEvent[]> {
     // return api.get('/dashboard/events')
     await new Promise((r) => setTimeout(r, 200))
 

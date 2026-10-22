@@ -8,6 +8,7 @@ const AssetsListView = () => import('@/views/AssetsListView.vue')
 const RequestsListView = () => import('@/views/RequestsListView.vue')
 const WorkOrdersListView = () => import('@/views/WorkOrdersListView.vue')
 const SparePartsListView = () => import('@/views/SparePartsListView.vue')
+const EventsView = () => import('@/views/EventsView.vue')
 const ReportsView = () => import('@/views/ReportsView.vue')
 const MonitoringView = () => import('@/views/MonitoringView.vue')
 const AdminUsersView = () => import('@/views/AdminUsersView.vue')
@@ -60,6 +61,12 @@ const routes: RouteRecordRaw[] = [
         name: 'spare-parts',
         component: SparePartsListView,
         meta: { title: 'Запчасти', roles: ['ADMIN', 'MASTER'] },
+      },
+      {
+        path: 'events',
+        name: 'events',
+        component: EventsView,
+        meta: { title: 'Журнал событий', roles: ['ADMIN', 'MASTER'] },
       },
       {
         path: 'reports',

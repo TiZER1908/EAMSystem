@@ -10,6 +10,7 @@ import type {
   EventItem,
   SystemStatusItem,
   DictionaryItem,
+  AuditEvent,
 } from './models.ts'
 
 export const MOCK_ASSETS: Asset[] = [
@@ -1021,6 +1022,159 @@ export const MOCK_SPARE_PARTS: SparePart[] = [
   },
 ]
 
+export const MOCK_AUDIT_EVENTS: AuditEvent[] = [
+  {
+    id: 1,
+    timestamp: '2026-10-17T10:30:00',
+    user: 'admin',
+    action: 'LOGIN',
+    entityType: 'USER',
+    entityId: 1,
+    details: 'Успешный вход в систему',
+    ipAddress: '192.168.1.10',
+  },
+  {
+    id: 2,
+    timestamp: '2026-10-17T10:35:00',
+    user: 'petrov',
+    action: 'CREATE',
+    entityType: 'REQUEST',
+    entityId: 101,
+    details: 'Создана заявка на ремонт Станок ЧПУ Haas',
+    ipAddress: '192.168.1.15',
+  },
+  {
+    id: 3,
+    timestamp: '2026-10-17T10:40:00',
+    user: 'ivanov',
+    action: 'UPDATE',
+    entityType: 'REQUEST',
+    entityId: 101,
+    details: 'Изменён статус заявки: NEW → ACCEPTED',
+    ipAddress: '192.168.1.12',
+  },
+  {
+    id: 4,
+    timestamp: '2026-10-17T11:00:00',
+    user: 'ivanov',
+    action: 'CREATE',
+    entityType: 'WORK_ORDER',
+    entityId: 201,
+    details: 'Создан наряд на основе заявки #101',
+    ipAddress: '192.168.1.12',
+  },
+  {
+    id: 5,
+    timestamp: '2026-10-17T11:15:00',
+    user: 'sidorov',
+    action: 'UPDATE',
+    entityType: 'WORK_ORDER',
+    entityId: 201,
+    details: 'Наряд переведён в статус IN_PROGRESS',
+    ipAddress: '192.168.1.18',
+  },
+  {
+    id: 6,
+    timestamp: '2026-10-17T12:00:00',
+    user: 'admin',
+    action: 'BLOCK',
+    entityType: 'USER',
+    entityId: 5,
+    details: 'Заблокирована учётная запись user1',
+    ipAddress: '192.168.1.10',
+  },
+  {
+    id: 7,
+    timestamp: '2026-10-17T12:30:00',
+    user: 'sidorov',
+    action: 'UPDATE',
+    entityType: 'WORK_ORDER',
+    entityId: 201,
+    details: 'Наряд переведён в статус COMPLETED',
+    ipAddress: '192.168.1.18',
+  },
+  {
+    id: 8,
+    timestamp: '2026-10-17T13:00:00',
+    user: 'ivanov',
+    action: 'UPDATE',
+    entityType: 'WORK_ORDER',
+    entityId: 201,
+    details: 'Наряд закрыт',
+    ipAddress: '192.168.1.12',
+  },
+  {
+    id: 9,
+    timestamp: '2026-10-17T14:00:00',
+    user: 'system',
+    action: 'FAILOVER',
+    entityType: 'DATABASE',
+    entityId: null,
+    details: 'Автоматический failover кластера БД: pg1 → pg2',
+    ipAddress: '127.0.0.1',
+  },
+  {
+    id: 10,
+    timestamp: '2026-10-17T14:15:00',
+    user: 'admin',
+    action: 'CREATE',
+    entityType: 'USER',
+    entityId: 10,
+    details: 'Создан новый пользователь master3',
+    ipAddress: '192.168.1.10',
+  },
+  {
+    id: 11,
+    timestamp: '2026-10-17T15:00:00',
+    user: 'kuznetsov',
+    action: 'CREATE',
+    entityType: 'REQUEST',
+    entityId: 102,
+    details: 'Создана заявка на ремонт Компрессор Atlas Copco',
+    ipAddress: '192.168.1.20',
+  },
+  {
+    id: 12,
+    timestamp: '2026-10-17T15:30:00',
+    user: 'ivanov',
+    action: 'REJECT',
+    entityType: 'REQUEST',
+    entityId: 102,
+    details: 'Заявка отклонена. Причина: Не гарантийный случай',
+    ipAddress: '192.168.1.12',
+  },
+  {
+    id: 13,
+    timestamp: '2026-10-17T16:00:00',
+    user: 'admin',
+    action: 'DELETE',
+    entityType: 'SPARE_PART',
+    entityId: 15,
+    details: 'Архивирована запчасть Кран шаровый 1"',
+    ipAddress: '192.168.1.10',
+  },
+  {
+    id: 14,
+    timestamp: '2026-10-17T16:30:00',
+    user: 'master1',
+    action: 'UPDATE',
+    entityType: 'ASSET',
+    entityId: 3,
+    details: 'Изменён ответственный сотрудник для Сервер Dell PowerEdge',
+    ipAddress: '192.168.1.11',
+  },
+  {
+    id: 15,
+    timestamp: '2026-10-17T17:00:00',
+    user: 'system',
+    action: 'LOGOUT',
+    entityType: 'USER',
+    entityId: 3,
+    details: 'Сессия истекла',
+    ipAddress: '192.168.1.18',
+  },
+]
+
 export const MOCK_USERS: User[] = [
   {
     id: 1,
@@ -1215,8 +1369,6 @@ export const MOCK_MONITORING: MonitoringData = {
   ],
 }
 
-console.log(MOCK_ASSETS)
-
 export const MOCK_DASHBOARD_KPI: KpiCard[] = [
   {
     id: 'assets',
@@ -1252,43 +1404,12 @@ export const MOCK_DASHBOARD_KPI: KpiCard[] = [
   },
 ]
 
-export const MOCK_DASHBOARD_EVENTS: EventItem[] = [
-  {
-    id: 1,
-    icon: '',
-    text: 'Иванов закрыл наряд №42 (Станок ЧПУ)',
-    time: '10 мин назад',
-    type: 'success',
-  },
-  {
-    id: 2,
-    icon: '',
-    text: 'Петров подал заявку на ремонт (Компрессор К-1)',
-    time: '25 мин назад',
-    type: 'info',
-  },
-  {
-    id: 3,
-    icon: '',
-    text: 'Failover кластера БД выполнен успешно',
-    time: '1 час назад',
-    type: 'warning',
-  },
-  {
-    id: 4,
-    icon: '',
-    text: 'Добавлен новый пользователь: master2',
-    time: '2 часа назад',
-    type: 'info',
-  },
-  {
-    id: 5,
-    icon: '',
-    text: 'Списано 2 шт. запчасти "Подшипник 6204"',
-    time: '3 часа назад',
-    type: 'info',
-  },
-]
+export const MOCK_DASHBOARD_EVENTS: AuditEvent[] = MOCK_AUDIT_EVENTS.filter(
+  (r) => r.user != 'system',
+)
+  .filter((r) => r.action != 'LOGIN')
+  .filter((r) => r.action != 'LOGOUT')
+  .slice(0, 5)
 
 export const MOCK_DASHBOARD_SYSTEM_STATUS: SystemStatusItem[] = [
   { name: 'Backend Spring Boot', status: 'up', value: 'работает' },
