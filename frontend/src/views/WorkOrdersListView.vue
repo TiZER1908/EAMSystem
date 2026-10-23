@@ -2,7 +2,8 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { workOrderService } from '@/services/workOrderService'
-import type { WorkOrder, WorkOrderStatus } from '@/services/models.ts'
+import type { WorkOrderView, WorkOrderStatus } from '@/services/models.ts'
+import { formatShortFIO } from '@/utils/formatters'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
@@ -10,7 +11,7 @@ const role = computed(() => authStore.user.role)
 const canCreate = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 const canSeeAll = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
-const workOrders = ref<WorkOrder[]>([])
+const workOrders = ref<WorkOrderView[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -149,19 +150,46 @@ function formatDate(dateStr: string): string {
           <tr v-for="wo in workOrders" :key="wo.id" class="table-row">
             <td class="table-cell--mono">#{{ wo.id }}</td>
             <td>
-              <div class="table-cell--bold">{{ wo.assetName }}</div>
-              <div class="table-cell--muted" style="font-size: 12px">{{ wo.inventoryNumber }}</div>
+              <div class="table-cell--bold">
+                <router-link :to="`/assets/${wo.asset.id}`" class="table-link" @click.stop>
+                  {{ wo.asset.name }}
+                </router-link>
+              </div>
+              <div class="table-cell--muted" style="font-size: 12px">
+                {{ wo.asset.inventoryNumber }}
+              </div>
             </td>
             <td class="table-cell--muted">
               {{ wo.requestId ? `#${wo.requestId}` : 'ППР' }}
             </td>
-            <td>{{ wo.masterName }}</td>
-            <td>
-              <span v-if="wo.technicianName">{{ wo.technicianName }}</span>
+            <td class="table-cell--bold">
+              <router-link :to="`/users/${wo.master.id}`" class="table-link" @click.stop>
+                {{ formatShortFIO(wo.master) }}
+              </router-link>
+            </td>
+            <td class="table-cell--bold">
+              <router-link
+                v-if="wo.technician?.lastName"
+                :to="`/users/${wo.technician?.id}`"
+                class="table-link"
+                @click.stop
+              >
+                {{ formatShortFIO(wo.technician) }}
+              </router-link>
               <span v-else class="table-cell--muted">Не назначен</span>
             </td>
             <td class="table-cell--muted">
-              {{ formatDate(wo.plannedStartDate) }} — {{ formatDate(wo.plannedEndDate) }}
+              <span v-if="wo.actualStartDate && wo.actualEndDate"
+                >с {{ formatDate(wo.actualStartDate) }} до {{ formatDate(wo.actualEndDate) }}</span
+              >
+              <span v-else-if="wo.actualStartDate && !wo.actualEndDate"
+                >с {{ formatDate(wo.actualStartDate) }}</span
+              >
+              <span v-else-if="!wo.actualStartDate && wo.actualEndDate"
+                >до {{ formatDate(wo.actualEndDate) }}</span
+              >
+              <span v-else-if="wo.status == 'DRAFT'">Ожидает планирования</span>
+              <span v-else>Сроки не указаны</span>
             </td>
             <td>
               <span class="badge" :class="`badge--status-${wo.status.toLowerCase()}`">
@@ -411,5 +439,16 @@ function formatDate(dateStr: string): string {
 .pagination__info {
   font-size: 13px;
   color: #64748b;
+}
+
+.table-link {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.table-link:hover {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 </style>

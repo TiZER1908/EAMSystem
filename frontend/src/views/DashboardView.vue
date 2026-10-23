@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { dashboardService } from '@/services/dashboardService'
-import type { KpiCard, RecentRequest, AuditEvent, SystemStatusItem } from '@/services/models.ts'
+import type { KpiCard, RecentRequest, AuditLog, SystemStatusItem } from '@/services/models.ts'
 
 import IconAssets from '@/assets/icons/assets.svg?component'
 import IconRequests from '@/assets/icons/requests.svg?component'
@@ -16,7 +16,7 @@ const role = computed(() => authStore.user.role)
 
 const kpiCards = ref<KpiCard[]>([])
 const recentRequests = ref<RecentRequest[]>([])
-const events = ref<AuditEvent[]>([])
+const events = ref<AuditLog[]>([])
 const systemStatus = ref<SystemStatusItem[]>([])
 const loading = ref(true)
 
@@ -94,7 +94,7 @@ function actionLabel(action: string): string {
 }
 
 function actionClass(action: string): string {
-  if (['DELETE', 'FAILOVER', 'REJECT'].includes(action)) return 'error'
+  if (['DELETE', 'FAILOVER', 'REJECT'].includes(action)) return 'danger'
   if (['CREATE'].includes(action)) return 'success'
   if (['LOGIN', 'LOGOUT'].includes(action)) return 'info'
   return 'warning'
@@ -162,9 +162,9 @@ function actionClass(action: string): string {
               <div class="request-row__main">
                 <div class="request-row__asset">
                   <span class="request-row__id">#{{ req.id }}</span>
-                  {{ req.asset }}
+                  {{ req.assetName }}
                 </div>
-                <div class="request-row__meta">{{ req.author }} · {{ req.time }}</div>
+                <div class="request-row__meta">{{ req.authorName }} · {{ req.time }}</div>
               </div>
 
               <div class="request-row__badges">
@@ -559,7 +559,7 @@ function actionClass(action: string): string {
 .event-row__icon--warning {
   background: #fef3c7;
 }
-.event-row__icon--error {
+.event-row__icon--danger {
   background: #fee2e2;
 }
 
@@ -578,7 +578,7 @@ function actionClass(action: string): string {
   width: 20px;
   height: 20px;
 }
-.icon--error {
+.icon--danger {
   color: #991b1b;
   width: 20px;
   height: 20px;

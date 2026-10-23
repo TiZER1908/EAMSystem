@@ -2,23 +2,26 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { dictionaryService } from '@/services/dictionaryService'
-import type { DictionaryType, DictionaryItem } from '@/services/models.ts'
+import type { AssetType, Location, Unit, SparePartCategory } from '@/services/models.ts'
 
 import IconPlus from '@/assets/icons/dictionaries.svg?component'
 import IconEdit from '@/assets/icons/edit.svg?component'
 import IconDelete from '@/assets/icons/archive.svg?component'
 
+type AnyDictionaryItem = AssetType | Location | Unit | SparePartCategory
+
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 const canView = computed(() => role.value === 'ADMIN')
 
-const activeTab = ref<DictionaryType>('ASSET_TYPES')
-const items = ref<DictionaryItem[]>([])
+const activeTab = ref<'ASSET_TYPES' | 'LOCATIONS' | 'UNITS' | 'SPARE_PART_CATEGORIES'>(
+  'ASSET_TYPES',
+)
+const items = ref<AnyDictionaryItem[]>([])
 const loading = ref(false)
 
 const tabs = [
   { id: 'ASSET_TYPES', label: 'Типы оборудования' },
-  { id: 'DEPARTMENTS', label: 'Подразделения' },
   { id: 'LOCATIONS', label: 'Локации' },
   { id: 'UNITS', label: 'Единицы измерения' },
   { id: 'SPARE_PART_CATEGORIES', label: 'Категории запчастей' },
@@ -28,7 +31,20 @@ async function loadItems() {
   if (!canView.value) return
   loading.value = true
   try {
-    items.value = await dictionaryService.getDictionaryItems(activeTab.value)
+    switch (activeTab.value) {
+      case 'ASSET_TYPES':
+        items.value = await dictionaryService.getAssetTypes()
+        break
+      case 'LOCATIONS':
+        items.value = await dictionaryService.getLocations()
+        break
+      case 'UNITS':
+        items.value = await dictionaryService.getUnits()
+        break
+      case 'SPARE_PART_CATEGORIES':
+        items.value = await dictionaryService.getSparePartCategories()
+        break
+    }
   } finally {
     loading.value = false
   }
@@ -86,14 +102,20 @@ watch(activeTab, loadItems)
               <td class="table-cell--mono">{{ item.id }}</td>
               <td class="table-cell--bold">{{ item.name }}</td>
 
-              <td v-if="activeTab === 'UNITS'">{{ item.shortName }}</td>
-              <td v-else>
-                <span v-if="item.description">{{ item.description }}</span>
-                <span v-else-if="item.parentName" class="table-cell--muted"
-                  >Родитель: {{ item.parentName }}</span
-                >
+              <td v-if="activeTab === 'UNITS' && 'shortName' in item">
+                {{ item.shortName }}
+              </td>
+              <td v-else-if="activeTab === 'LOCATIONS' && 'parentLocationId' in item">
+                <span v-if="item.parentLocationId" class="table-cell--muted">
+                  Родитель: ID {{ item.parentLocationId }}
+                </span>
                 <span v-else class="table-cell--muted">—</span>
               </td>
+              <td v-else-if="'description' in item">
+                <span v-if="item.description">{{ item.description }}</span>
+                <span v-else class="table-cell--muted">—</span>
+              </td>
+              <td v-else class="table-cell--muted">—</td>
 
               <td class="actions-col">
                 <button class="action-btn">
@@ -112,7 +134,6 @@ watch(activeTab, loadItems)
 </template>
 
 <style scoped>
-/* Стили аналогичны предыдущим страницам, добавим только стили для табов */
 .dictionaries {
   display: flex;
   flex-direction: column;

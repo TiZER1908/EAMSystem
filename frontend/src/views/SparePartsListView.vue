@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { sparePartService } from '@/services/sparePartService'
-import type { SparePart, SparePartStatus } from '@/services/models.ts'
+import type { SparePartView, SparePartStatus } from '@/services/models.ts'
 
 import IconEdit from '@/assets/icons/edit.svg?component'
 import IconArchive from '@/assets/icons/archive.svg?component'
@@ -14,7 +14,7 @@ const canView = computed(() => ['ADMIN', 'MASTER', 'TECHNICIAN'].includes(role.v
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 const canDelete = computed(() => role.value === 'ADMIN')
 
-const spareParts = ref<SparePart[]>([])
+const spareParts = ref<SparePartView[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -132,8 +132,8 @@ function stockClass(quantity: number) {
             <tr v-for="sp in spareParts" :key="sp.id" class="table-row">
               <td class="table-cell--mono">{{ sp.article || '—' }}</td>
               <td class="table-cell--bold">{{ sp.name }}</td>
-              <td>{{ sp.categoryName || '—' }}</td>
-              <td>{{ sp.unitName || '—' }}</td>
+              <td>{{ sp.category?.name || '—' }}</td>
+              <td>{{ sp.unit?.shortName || '—' }}</td>
               <td>
                 <span class="stock" :class="stockClass(sp.stockQuantity)">
                   {{ sp.stockQuantity }}

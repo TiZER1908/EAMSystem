@@ -2,17 +2,20 @@ import {
   MOCK_ASSETS,
   MOCK_ASSET_HISTORY,
   MOCK_ASSET_ATTACHMENTS,
-  MOCK_DICT_ASSET_TYPES,
-  MOCK_DICT_LOCATIONS,
+  MOCK_ASSET_TYPES,
+  MOCK_LOCATIONS,
+  MOCK_USERS,
 } from './mockData'
-import type { Asset, AssetFilter, AssetHistory, AssetAttachment, DictionaryItem } from './models.ts'
+import type { AssetFilter, AssetView, AssetHistoryView, AssetAttachment, Asset } from './models.ts'
 
 export const assetService = {
-  async getAssets(filter: AssetFilter): Promise<{ content: Asset[]; totalElements: number }> {
-    // return api.get('/assets', { params: filter })
+  async getAssets(filter: AssetFilter): Promise<{ content: AssetView[]; totalElements: number }> {
+    // const { data } = await api.get<{ content: AssetView[]; totalElements: number }>('/assets', { params: filter })
+    // return data
+
     await new Promise((r) => setTimeout(r, 300))
 
-    let filtered = [...MOCK_ASSETS]
+    let filtered = MOCK_ASSETS.filter((a) => !a.isDeleted)
 
     if (filter.search) {
       const s = filter.search.toLowerCase()
@@ -20,7 +23,7 @@ export const assetService = {
         (a) =>
           a.name.toLowerCase().includes(s) ||
           a.inventoryNumber.toLowerCase().includes(s) ||
-          a.serialNumber.toLowerCase().includes(s),
+          (a.serialNumber && a.serialNumber.toLowerCase().includes(s)),
       )
     }
 
@@ -28,27 +31,84 @@ export const assetService = {
       filtered = filtered.filter((a) => a.status === filter.status)
     }
 
+    const totalElements = filtered.length
     const start = (filter.page - 1) * filter.size
-    const content = filtered.slice(start, start + filter.size)
+    const paginated = filtered.slice(start, start + filter.size)
 
-    return { content, totalElements: filtered.length }
+    const content: AssetView[] = paginated.map((asset) => {
+      const type = MOCK_ASSET_TYPES.find((t) => t.id === asset.assetTypeId)
+      const location = MOCK_LOCATIONS.find((l) => l.id === asset.locationId)
+      const respUser = MOCK_USERS.find((u) => u.id === asset.responsibleUserId)
+
+      return {
+        ...asset,
+        assetType: { id: asset.assetTypeId, name: type?.name || 'Неизвестно' },
+        location: { id: asset.locationId, name: location?.name || 'Неизвестно' },
+        responsibleUser: respUser
+          ? {
+              id: respUser.id,
+              lastName: respUser.lastName,
+              firstName: respUser.firstName,
+              middleName: respUser.middleName,
+              role: respUser.role,
+            }
+          : null,
+      }
+    })
+
+    return { content, totalElements }
   },
 
-  async getAssetById(id: number): Promise<Asset> {
-    // const { data } = await api.get<Asset>(`/assets/${id}`)
+  async getAssetById(id: number): Promise<AssetView> {
+    // const { data } = await api.get<AssetView>(`/assets/${id}`)
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
-    const asset = MOCK_ASSETS.find((a) => a.id === id)
+    const asset = MOCK_ASSETS.find((a) => a.id === id && !a.isDeleted)
     if (!asset) throw new Error('Asset not found')
-    return asset as Asset
+
+    const type = MOCK_ASSET_TYPES.find((t) => t.id === asset.assetTypeId)
+    const location = MOCK_LOCATIONS.find((l) => l.id === asset.locationId)
+    const respUser = MOCK_USERS.find((u) => u.id === asset.responsibleUserId)
+
+    return {
+      ...asset,
+      assetType: { id: asset.assetTypeId, name: type?.name || 'Неизвестно' },
+      location: { id: asset.locationId, name: location?.name || 'Неизвестно' },
+      responsibleUser: respUser
+        ? {
+            id: respUser.id,
+            lastName: respUser.lastName,
+            firstName: respUser.firstName,
+            middleName: respUser.middleName,
+            role: respUser.role,
+          }
+        : null,
+    }
   },
-  async getAssetHistory(id: number): Promise<AssetHistory[]> {
-    // const { data } = await api.get<AssetHistory[]>(`/assets/${id}/history`)
+
+  async getAssetHistory(id: number): Promise<AssetHistoryView[]> {
+    // const { data } = await api.get<AssetHistoryView[]>(`/assets/${id}/history`)
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
-    return MOCK_ASSET_HISTORY[id] || []
+    const rawHistory = MOCK_ASSET_HISTORY.filter((h) => h.assetId === id)
+
+    return rawHistory.map((item) => {
+      const user = MOCK_USERS.find((u) => u.id === item.userId)
+      return {
+        ...item,
+        user: user
+          ? {
+              id: user.id,
+              lastName: user.lastName,
+              firstName: user.firstName,
+              middleName: user.middleName,
+              role: user.role,
+            }
+          : null,
+      }
+    })
   },
 
   async getAssetAttachments(id: number): Promise<AssetAttachment[]> {
@@ -56,11 +116,11 @@ export const assetService = {
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
-    return MOCK_ASSET_ATTACHMENTS[id] || []
+    return MOCK_ASSET_ATTACHMENTS.filter((att) => att.assetId === id && !att.isDeleted)
   },
 
-  async updateAsset(id: number, payload: Partial<Asset>): Promise<Asset> {
-    // const { data } = await api.put<Asset>(`/assets/${id}`, payload)
+  async updateAsset(id: number, payload: Partial<Asset>): Promise<AssetView> {
+    // const { data } = await api.put<AssetView>(`/assets/${id}`, payload)
     // return data
 
     await new Promise((r) => setTimeout(r, 300))
@@ -68,18 +128,8 @@ export const assetService = {
     const index = MOCK_ASSETS.findIndex((a) => a.id === id)
     if (index === -1) throw new Error('Asset not found')
 
-    return { ...MOCK_ASSETS[index], ...payload } as Asset
-  },
+    const updated = { ...MOCK_ASSETS[index]!, ...payload }
 
-  async getAssetTypes(): Promise<DictionaryItem[]> {
-    // const { data } = await api.get<DictionaryItem[]>('/dictionaries/asset-types')
-    // return data
-    return MOCK_DICT_ASSET_TYPES
-  },
-
-  async getLocations(): Promise<DictionaryItem[]> {
-    // const { data } = await api.get<DictionaryItem[]>('/dictionaries/locations')
-    // return data
-    return MOCK_DICT_LOCATIONS
+    return this.getAssetById(updated.id)
   },
 }

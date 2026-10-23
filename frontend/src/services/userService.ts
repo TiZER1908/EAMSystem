@@ -1,7 +1,33 @@
-import type { User, UserFilter } from './models.ts'
+import type { User, UserFilter, UserShort } from './models.ts'
 import { MOCK_USERS } from './mockData'
 
 import api from './api'
+
+export function fullNameShortOneLetter(user: UserShort): string {
+  let result = user.lastName
+  result += ' ' + user.firstName[0] + '.'
+  if (user.middleName) {
+    result += ' ' + user.middleName[0] + '.'
+  }
+  return result
+}
+
+export function fullNameShort(user: UserShort): string {
+  return [user.lastName, user.firstName, user.middleName].filter(Boolean).join(' ')
+}
+
+export function fullNameOneLetter(user: User): string {
+  let result = user.lastName
+  result += ' ' + user.firstName[0] + '.'
+  if (user.middleName) {
+    result += ' ' + user.middleName[0] + '.'
+  }
+  return result
+}
+
+export function fullName(user: User): string {
+  return [user.lastName, user.firstName, user.middleName].filter(Boolean).join(' ')
+}
 
 export const userService = {
   async getUsers(filter: UserFilter): Promise<{ content: User[]; totalElements: number }> {

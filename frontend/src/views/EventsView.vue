@@ -2,13 +2,13 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { eventsService } from '@/services/eventsService'
-import type { AuditEvent } from '@/services/models'
+import type { AuditLog } from '@/services/models'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 const canView = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
-const events = ref<AuditEvent[]>([])
+const events = ref<AuditLog[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -165,8 +165,8 @@ function actionClass(action: string): string {
               <td colspan="6" class="table-empty">Событий не найдено</td>
             </tr>
             <tr v-for="event in events" :key="event.id" class="table-row">
-              <td class="table-cell--muted">{{ formatDate(event.timestamp) }}</td>
-              <td class="table-cell--bold">{{ event.user }}</td>
+              <td class="table-cell--muted">{{ formatDate(event.createdAt) }}</td>
+              <td class="table-cell--bold">{{ event.userId }}</td>
               <td>
                 <span class="badge" :class="actionClass(event.action)">
                   {{ actionLabel(event.action) }}

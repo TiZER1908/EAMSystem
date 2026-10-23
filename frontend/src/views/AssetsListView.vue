@@ -2,8 +2,9 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { assetService } from '@/services/assetService'
-import type { Asset, AssetStatus } from '@/services/models.ts'
+import type { AssetView, AssetStatus } from '@/services/models.ts'
 import { useRouter } from 'vue-router'
+import { formatShortFIO } from '@/utils/formatters'
 const router = useRouter()
 
 const authStore = useAuthStore
@@ -11,7 +12,7 @@ const role = computed(() => authStore.user.role)
 
 const canCreate = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
-const assets = ref<Asset[]>([])
+const assets = ref<AssetView[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -150,16 +151,28 @@ function formatDate(date: string): string {
                 {{ asset.name }}
               </router-link>
             </td>
-            <td>{{ asset.assetTypeName }}</td>
+            <td>{{ asset.assetType.name }}</td>
             <td class="table-cell--muted">{{ asset.model }}</td>
-            <td>{{ asset.locationName }}</td>
-            <td>{{ asset.responsibleUserName }}</td>
+            <td>{{ asset.location.name }}</td>
+            <td class="table-cell--bold">
+              <router-link
+                v-if="asset.responsibleUser"
+                :to="`/users/${asset.responsibleUser?.id}`"
+                class="table-link"
+                @click.stop
+              >
+                {{ formatShortFIO(asset.responsibleUser) }}
+              </router-link>
+              <span v-else>-</span>
+            </td>
             <td>
               <span class="badge" :class="`badge--${asset.status.toLowerCase()}`">
                 {{ statusLabel(asset.status) }}
               </span>
             </td>
-            <td class="table-cell--muted">{{ formatDate(asset.commissionDate) }}</td>
+            <td class="table-cell--muted">
+              {{ asset.commissionDate ? formatDate(asset.commissionDate) : '—' }}
+            </td>
           </tr>
         </tbody>
       </table>

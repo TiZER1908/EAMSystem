@@ -1,33 +1,42 @@
 import api from './api'
-import type { DictionaryType, DictionaryItem } from './models.ts'
 import {
-  MOCK_DICT_ASSET_TYPES,
-  MOCK_DICT_DEPARTMENTS,
-  MOCK_DICT_LOCATIONS,
-  MOCK_DICT_UNITS,
-  MOCK_DICT_SPARE_PART_CATEGORIES,
+  MOCK_ASSET_TYPES,
+  MOCK_LOCATIONS,
+  MOCK_UNITS,
+  MOCK_SPARE_PART_CATEGORIES,
 } from './mockData'
+import type { AssetType, Location, Unit, SparePartCategory } from './models'
 
 export const dictionaryService = {
-  async getDictionaryItems(type: DictionaryType): Promise<DictionaryItem[]> {
-    // const { data } = await api.get<DictionaryItem[]>(`/dictionaries/${type}`)
+  async getAssetTypes(): Promise<AssetType[]> {
+    // const { data } = await api.get<AssetType[]>('/dictionaries/asset-types')
     // return data
 
-    await new Promise((r) => setTimeout(r, 300))
+    await new Promise((r) => setTimeout(r, 200))
+    return MOCK_ASSET_TYPES
+  },
 
-    switch (type) {
-      case 'ASSET_TYPES':
-        return MOCK_DICT_ASSET_TYPES
-      case 'DEPARTMENTS':
-        return MOCK_DICT_DEPARTMENTS
-      case 'LOCATIONS':
-        return MOCK_DICT_LOCATIONS
-      case 'UNITS':
-        return MOCK_DICT_UNITS
-      case 'SPARE_PART_CATEGORIES':
-        return MOCK_DICT_SPARE_PART_CATEGORIES
-      default:
-        return []
-    }
+  async getLocations(): Promise<Location[]> {
+    // const { data } = await api.get<Location[]>('/dictionaries/locations')
+    // return data
+
+    await new Promise((r) => setTimeout(r, 200))
+    return MOCK_LOCATIONS
+  },
+
+  async getUnits(): Promise<Unit[]> {
+    // const { data } = await api.get<Unit[]>('/dictionaries/units')
+    // return data
+
+    await new Promise((r) => setTimeout(r, 200))
+    return MOCK_UNITS
+  },
+
+  async getSparePartCategories(): Promise<SparePartCategory[]> {
+    // const { data } = await api.get<SparePartCategory[]>('/dictionaries/spare-part-categories')
+    // return data
+
+    await new Promise((r) => setTimeout(r, 200))
+    return MOCK_SPARE_PART_CATEGORIES
   },
 }

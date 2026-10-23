@@ -3,7 +3,13 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { assetService } from '@/services/assetService'
-import type { Asset, AssetHistory, AssetAttachment, AssetHistoryType } from '@/services/models'
+import type {
+  AssetView,
+  AssetHistoryView,
+  AssetAttachment,
+  AssetHistoryType,
+} from '@/services/models'
+import { formatFIO } from '@/utils/formatters'
 
 import IconBack from '@/assets/icons/logout.svg?component'
 import IconEdit from '@/assets/icons/edit.svg?component'
@@ -20,8 +26,8 @@ const canCreateRequest = computed(() => true)
 const assetId = computed(() => Number(route.params.id))
 const activeTab = ref<'info' | 'history' | 'files'>('info')
 
-const asset = ref<Asset | null>(null)
-const history = ref<AssetHistory[]>([])
+const asset = ref<AssetView | null>(null)
+const history = ref<AssetHistoryView[]>([])
 const attachments = ref<AssetAttachment[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -154,7 +160,7 @@ function goToRequestCreate() {
           <div class="info-grid">
             <div class="info-item">
               <span class="info-label">Тип оборудования</span>
-              <span class="info-value">{{ asset.assetTypeName }}</span>
+              <span class="info-value">{{ asset.assetType.name }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Модель</span>
@@ -166,16 +172,20 @@ function goToRequestCreate() {
             </div>
             <div class="info-item">
               <span class="info-label">Локация</span>
-              <span class="info-value">{{ asset.locationName }}</span>
+              <span class="info-value">{{ asset.location.name }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Ответственный</span>
-              <span class="info-value">{{ asset.responsibleUserName || '—' }}</span>
+              <span class="info-value">{{
+                asset.responsibleUser ? formatFIO(asset.responsibleUser) : '—'
+              }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Дата ввода в эксплуатацию</span>
               <span class="info-value">{{
-                new Date(asset.commissionDate).toLocaleDateString('ru-RU')
+                asset.commissionDate
+                  ? new Date(asset.commissionDate).toLocaleDateString('ru-RU')
+                  : '—'
               }}</span>
             </div>
           </div>
@@ -189,7 +199,7 @@ function goToRequestCreate() {
               <div class="timeline-content">
                 <div class="timeline-header">
                   <span class="timeline-type">{{ historyTypeLabel(item.eventType) }}</span>
-                  <span class="timeline-user">{{ item.userName }}</span>
+                  <span class="timeline-user">{{ item.user?.lastName }}</span>
                 </div>
                 <div class="timeline-desc">{{ item.description }}</div>
                 <div v-if="item.oldValue || item.newValue" class="timeline-change">

@@ -2,7 +2,8 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { requestService } from '@/services/requestService'
-import type { Request, RequestStatus, RequestPriority } from '@/services/models.ts'
+import type { RequestView, RequestStatus, RequestPriority } from '@/services/models.ts'
+import { formatShortFIO } from '@/utils/formatters'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
@@ -11,7 +12,7 @@ const canCreate = computed(() => true)
 
 const canSeeAll = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
-const requests = ref<Request[]>([])
+const requests = ref<RequestView[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -167,11 +168,26 @@ function formatDate(dateStr: string): string {
           <tr v-for="req in requests" :key="req.id" class="table-row">
             <td class="table-cell--mono">#{{ req.id }}</td>
             <td>
-              <div class="table-cell--bold">{{ req.assetName }}</div>
-              <div class="table-cell--muted" style="font-size: 12px">{{ req.inventoryNumber }}</div>
+              <div class="table-cell--bold">
+                <router-link :to="`/assets/${req.asset.id}`" class="table-link" @click.stop>
+                  {{ req.asset.name }}
+                </router-link>
+              </div>
+              <div class="table-cell--muted" style="font-size: 12px">
+                {{ req.asset.inventoryNumber }}
+              </div>
             </td>
             <td class="table-cell--desc">{{ req.description }}</td>
-            <td>{{ req.authorName }}</td>
+            <td class="table-cell--bold">
+              <router-link
+                v-if="req.author"
+                :to="`/users/${req.author.id}`"
+                class="table-link"
+                @click.stop
+              >
+                {{ formatShortFIO(req.author) }}
+              </router-link>
+            </td>
             <td>
               <span class="badge" :class="`badge--priority-${req.priority.toLowerCase()}`">
                 {{ priorityLabel(req.priority) }}
@@ -450,5 +466,16 @@ function formatDate(dateStr: string): string {
 .pagination__info {
   font-size: 13px;
   color: #64748b;
+}
+
+.table-link {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.table-link:hover {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 </style>

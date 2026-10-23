@@ -1,11 +1,11 @@
 import api from './api'
 import { MOCK_AUDIT_EVENTS } from './mockData'
-import type { AuditEvent, AuditEventFilter } from './models'
+import type { AuditLog, AuditEventFilter } from './models'
 
 export const eventsService = {
   async getEvents(
     filter: AuditEventFilter,
-  ): Promise<{ content: AuditEvent[]; totalElements: number }> {
+  ): Promise<{ content: AuditLog[]; totalElements: number }> {
     // const { data } = await api.get('/events', { params: filter })
     // return data
 
@@ -16,10 +16,7 @@ export const eventsService = {
     if (filter.search) {
       const s = filter.search.toLowerCase()
       filtered = filtered.filter(
-        (e) =>
-          e.user.toLowerCase().includes(s) ||
-          e.details.toLowerCase().includes(s) ||
-          e.entityType.toLowerCase().includes(s),
+        (e) => e.details?.toLowerCase().includes(s) || e.entityType.toLowerCase().includes(s),
       )
     }
 
@@ -28,16 +25,16 @@ export const eventsService = {
     }
 
     if (filter.dateFrom) {
-      filtered = filtered.filter((e) => new Date(e.timestamp) >= new Date(filter.dateFrom))
+      filtered = filtered.filter((e) => new Date(e.createdAt) >= new Date(filter.dateFrom))
     }
 
     if (filter.dateTo) {
       const to = new Date(filter.dateTo)
       to.setHours(23, 59, 59, 999)
-      filtered = filtered.filter((e) => new Date(e.timestamp) <= to)
+      filtered = filtered.filter((e) => new Date(e.createdAt) <= to)
     }
 
-    filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
     const start = (filter.page - 1) * filter.size
     const content = filtered.slice(start, start + filter.size)
