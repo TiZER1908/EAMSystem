@@ -19,8 +19,9 @@
 4. **Аудит** ведётся в двух местах:
    - `asset_history` — история конкретного актива (видна в карточке).
    - `audit_log` — общий журнал всех действий (виден только Администратору).
-5. **Вложения** (фото) хранятся в файловой системе, в БД — только метаданные (`file_path`, `file_size`, `content_type`).
+5. **Вложения** (фото, инструкции, паспорта) хранятся в файловой системе, в БД — только метаданные (`file_path`, `file_size`, `content_type`). Для каждого типа сущности — отдельная таблица вложений (`asset_attachments`, `request_attachments`, `work_order_attachments`). Это позволяет сохранить ссылочную целостность через внешние ключи. Полиморфная таблица с `entity_type`/`entity_id` была отклонена, так как не позволяет обеспечить FK-ограничения на уровне БД.
 6. **Мягкое удаление (Soft Delete)** используется для ключевых сущностей: `users`, `assets`, `requests`, `work_orders`, `spare_parts`, а также для вложений, задач наряда, запчастей в наряде и комментариев. Это сохраняет ссылочную целостность и историю. Поля: `is_deleted` (BOOLEAN, NOT NULL, default false), `deleted_at` (TIMESTAMP, NULL), `deleted_by` (BIGINT, FK → users, NULL).
+7. **ФИО пользователя** хранится в трёх отдельных полях: `last_name`, `first_name`, `middle_name`. Отчество (`middle_name`) может отсутствовать (nullable).
 
 ## Сущности
 
@@ -99,6 +100,22 @@
 | `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
 | `created_at` | TIMESTAMP | NOT NULL | Дата создания |
 | `updated_at` | TIMESTAMP | NOT NULL | Дата обновления |
+
+#### asset_attachments (Вложения активов)
+
+| Поле | Тип | Ограничения | Описание |
+|---|---|---|---|
+| `id` | BIGINT | PK, auto | Идентификатор |
+| `asset_id` | BIGINT | FK → assets, NOT NULL | Актив |
+| `file_name` | VARCHAR(255) | NOT NULL | Имя файла |
+| `file_path` | VARCHAR(500) | NOT NULL | Путь к файлу |
+| `file_size` | BIGINT | NOT NULL | Размер в байтах |
+| `content_type` | VARCHAR(100) | NOT NULL | MIME-тип |
+| `attachment_type` | VARCHAR(50) | NOT NULL | Тип: `INSTRUCTION`, `PASSPORT`, `PHOTO` |
+| `is_deleted` | BOOLEAN | NOT NULL, default false | Флаг мягкого удаления |
+| `deleted_at` | TIMESTAMP | NULL | Дата мягкого удаления |
+| `deleted_by` | BIGINT | FK → users, NULL | Кто выполнил мягкое удаление |
+| `created_at` | TIMESTAMP | NOT NULL | Дата загрузки |
 
 #### requests (Заявки)
 
@@ -286,6 +303,7 @@
 | `asset_types` → `assets` | 1:N | Один тип — много активов |
 | `locations` → `assets` | 1:N | Одна локация — много активов |
 | `locations` → `locations` | 1:N | Иерархия локаций (родитель — дети) |
+| `assets` → `asset_attachments` | 1:N | Один актив — много вложений |
 | `assets` → `requests` | 1:N | Один актив — много заявок |
 | `assets` → `work_orders` | 1:N | Один актив — много нарядов |
 | `assets` → `asset_history` | 1:N | Один актив — много записей истории |

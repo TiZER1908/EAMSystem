@@ -8,6 +8,7 @@ export type WorkOrderStatus =
   'DRAFT' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CLOSED' | 'CANCELLED'
 export type DictionaryType =
   'ASSET_TYPES' | 'DEPARTMENTS' | 'LOCATIONS' | 'UNITS' | 'SPARE_PART_CATEGORIES'
+export type AssetHistoryType = 'CREATED' | 'STATUS_CHANGED' | 'REPAIR' | 'MOVED' | 'COMMENT'
 
 export interface BaseEntity {
   isDeleted: boolean
@@ -238,4 +239,23 @@ export interface AuditEventFilter {
   dateTo: string
   page: number
   size: number
+}
+
+export interface AssetHistory {
+  id: number
+  eventType: AssetHistoryType
+  description: string
+  oldValue: string | null
+  newValue: string | null
+  userName: string
+  createdAt: string
+}
+
+export interface AssetAttachment {
+  id: number
+  fileName: string
+  filePath: string
+  fileSize: number
+  contentType: string
+  createdAt: string
 }

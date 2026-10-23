@@ -17,6 +17,8 @@ const ProfileView = () => import('@/views/ProfileView.vue')
 const SettingsView = () => import('@/views/SettingsView.vue')
 const LoginView = () => import('@/views/LoginView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
+const AssetDetailView = () => import('@/views/AssetDetailView.vue')
+const AssetEditView = () => import('@/views/AssetEditView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -43,6 +45,18 @@ const routes: RouteRecordRaw[] = [
         name: 'assets',
         component: AssetsListView,
         meta: { title: 'Активы', roles: ['ADMIN', 'MASTER', 'TECHNICIAN'] },
+      },
+      {
+        path: 'assets/:id',
+        name: 'asset-detail',
+        component: AssetDetailView,
+        meta: { title: 'Карточка актива', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+      },
+      {
+        path: 'assets/:id/edit',
+        name: 'asset-edit',
+        component: AssetEditView,
+        meta: { title: 'Редактирование актива', roles: ['ADMIN', 'MASTER'] },
       },
       {
         path: 'requests',

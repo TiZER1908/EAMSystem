@@ -11,6 +11,8 @@ import type {
   SystemStatusItem,
   DictionaryItem,
   AuditEvent,
+  AssetHistory,
+  AssetAttachment,
 } from './models.ts'
 
 export const MOCK_ASSETS: Asset[] = [
@@ -1508,3 +1510,74 @@ export const MOCK_DICT_SPARE_PART_CATEGORIES: DictionaryItem[] = [
   { id: 5, name: 'Уплотнения' },
   { id: 6, name: 'Электрика' },
 ]
+
+export const MOCK_ASSET_HISTORY: Record<number, AssetHistory[]> = {
+  1: [
+    {
+      id: 1,
+      eventType: 'CREATED',
+      description: 'Актив добавлен в систему',
+      oldValue: null,
+      newValue: null,
+      userName: 'Администратор',
+      createdAt: '2020-05-15T10:00:00',
+    },
+    {
+      id: 2,
+      eventType: 'STATUS_CHANGED',
+      description: 'Изменение статуса',
+      oldValue: 'INACTIVE',
+      newValue: 'ACTIVE',
+      userName: 'Иванов И.И.',
+      createdAt: '2020-05-16T09:00:00',
+    },
+    {
+      id: 3,
+      eventType: 'MOVED',
+      description: 'Перемещение',
+      oldValue: 'Цех №2',
+      newValue: 'Цех №1',
+      userName: 'Петров П.П.',
+      createdAt: '2021-01-10T14:30:00',
+    },
+    {
+      id: 4,
+      eventType: 'REPAIR',
+      description: 'Ремонт по наряду #199',
+      oldValue: null,
+      newValue: 'Закрыт',
+      userName: 'Сидоров С.С.',
+      createdAt: '2024-11-20T11:00:00',
+    },
+    {
+      id: 5,
+      eventType: 'STATUS_CHANGED',
+      description: 'Изменение статуса',
+      oldValue: 'ACTIVE',
+      newValue: 'UNDER_REPAIR',
+      userName: 'Иванов И.И.',
+      createdAt: '2026-10-16T10:00:00',
+    },
+  ],
+}
+
+export const MOCK_ASSET_ATTACHMENTS: Record<number, AssetAttachment[]> = {
+  1: [
+    {
+      id: 1,
+      fileName: 'passport_haas_vf2.pdf',
+      filePath: '/files/1/passport.pdf',
+      fileSize: 1048576,
+      contentType: 'application/pdf',
+      createdAt: '2020-05-15T10:30:00',
+    },
+    {
+      id: 2,
+      fileName: 'photo_main.jpg',
+      filePath: '/files/1/photo1.jpg',
+      fileSize: 2097152,
+      contentType: 'image/jpeg',
+      createdAt: '2020-05-15T10:35:00',
+    },
+  ],
+}

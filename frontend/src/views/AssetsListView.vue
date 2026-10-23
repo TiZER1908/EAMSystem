@@ -3,6 +3,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { assetService } from '@/services/assetService'
 import type { Asset, AssetStatus } from '@/services/models.ts'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
@@ -93,7 +95,6 @@ function formatDate(date: string): string {
       <button v-if="canCreate" class="btn btn--primary"><span>+</span> Создать актив</button>
     </div>
 
-    <!-- Фильтры -->
     <div class="assets__filters">
       <div class="filter-group">
         <label class="filter-label">Поиск</label>
@@ -137,9 +138,18 @@ function formatDate(date: string): string {
           <tr v-if="assets.length === 0">
             <td colspan="8" class="table-empty">Активы не найдены</td>
           </tr>
-          <tr v-for="asset in assets" :key="asset.id" class="table-row">
+          <tr
+            v-for="asset in assets"
+            :key="asset.id"
+            class="table-row table-row--clickable"
+            @click="router.push(`/assets/${asset.id}`)"
+          >
             <td class="table-cell--mono">{{ asset.inventoryNumber }}</td>
-            <td class="table-cell--bold">{{ asset.name }}</td>
+            <td class="table-cell--bold">
+              <router-link :to="`/assets/${asset.id}`" class="table-link" @click.stop>
+                {{ asset.name }}
+              </router-link>
+            </td>
             <td>{{ asset.assetTypeName }}</td>
             <td class="table-cell--muted">{{ asset.model }}</td>
             <td>{{ asset.locationName }}</td>
@@ -308,6 +318,10 @@ function formatDate(date: string): string {
   border-bottom: none;
 }
 
+.table-row--clickable {
+  cursor: pointer;
+}
+
 .table-row:hover {
   background: #f8fafc;
 }
@@ -325,6 +339,17 @@ function formatDate(date: string): string {
 
 .table-cell--muted {
   color: #94a3b8;
+}
+
+.table-link {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.table-link:hover {
+  color: #3b82f6;
+  text-decoration: underline;
 }
 
 .badge {
