@@ -21,6 +21,9 @@ const AssetDetailView = () => import('@/views/AssetDetailView.vue')
 const AssetEditView = () => import('@/views/AssetEditView.vue')
 const RequestDetailView = () => import('@/views/RequestDetailView.vue')
 const RequestCreateView = () => import('@/views/RequestCreateView.vue')
+const WorkOrderDetailView = () => import('@/views/WorkOrderDetailView.vue')
+const AssetCreateView = () => import('@/views/AssetCreateView.vue')
+const WorkOrderCreateView = () => import('@/views/WorkOrderCreateView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -51,7 +54,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'assets/new',
         name: 'asset-create',
-        component: () => import('@/views/AssetCreateView.vue'),
+        component: AssetCreateView,
         meta: { title: 'Новый актив', roles: ['ADMIN', 'MASTER'] },
       },
       {
@@ -89,6 +92,18 @@ const routes: RouteRecordRaw[] = [
         name: 'work-orders',
         component: WorkOrdersListView,
         meta: { title: 'Наряды', roles: ['ADMIN', 'MASTER', 'TECHNICIAN'] },
+      },
+      {
+        path: 'work-orders/new',
+        name: 'work-order-create',
+        component: WorkOrderCreateView,
+        meta: { title: 'Создание наряда', roles: ['ADMIN', 'MASTER'] },
+      },
+      {
+        path: 'work-orders/:id',
+        name: 'work-order-detail',
+        component: WorkOrderDetailView,
+        meta: { title: 'Карточка наряда', roles: ['ADMIN', 'MASTER', 'TECHNICIAN'] },
       },
       {
         path: 'spare-parts',

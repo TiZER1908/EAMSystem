@@ -4,12 +4,14 @@ import { useAuthStore } from '@/stores/auth'
 import { workOrderService } from '@/services/workOrderService'
 import type { WorkOrderView, WorkOrderStatus } from '@/services/models.ts'
 import { formatShortFIO } from '@/utils/formatters'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
 const canCreate = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
-const canSeeAll = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
+const canSeeAll = computed(() => ['ADMIN', 'MASTER', 'TECHNICIAN'].includes(role.value))
 
 const workOrders = ref<WorkOrderView[]>([])
 const totalElements = ref(0)
@@ -100,7 +102,9 @@ function formatDate(dateStr: string): string {
         </p>
       </div>
 
-      <button v-if="canCreate" class="btn btn--primary"><span>+</span> Создать наряд</button>
+      <button v-if="canCreate" class="btn btn--primary" @click="router.push('/work-orders/new')">
+        <span>+</span> Создать наряд
+      </button>
     </div>
 
     <div class="work-orders__filters">
@@ -147,7 +151,12 @@ function formatDate(dateStr: string): string {
           <tr v-if="workOrders.length === 0">
             <td colspan="7" class="table-empty">Наряды не найдены</td>
           </tr>
-          <tr v-for="wo in workOrders" :key="wo.id" class="table-row">
+          <tr
+            v-for="wo in workOrders"
+            :key="wo.id"
+            class="table-row table-row--clickable"
+            @click="router.push(`/work-orders/${wo.id}`)"
+          >
             <td class="table-cell--mono">#{{ wo.id }}</td>
             <td>
               <div class="table-cell--bold">
@@ -455,5 +464,9 @@ function formatDate(dateStr: string): string {
 .table-link:hover {
   color: #3b82f6;
   text-decoration: underline;
+}
+
+.table-row--clickable {
+  cursor: pointer;
 }
 </style>

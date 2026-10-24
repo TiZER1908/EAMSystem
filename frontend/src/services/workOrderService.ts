@@ -1,5 +1,13 @@
-import type { WorkOrderFilter, WorkOrderView } from './models.ts'
-import { MOCK_WORK_ORDERS, MOCK_ASSETS, MOCK_USERS, MOCK_REQUESTS } from './mockData'
+import type { WorkOrderDetailView, WorkOrderFilter, WorkOrderView } from './models.ts'
+import {
+  MOCK_WORK_ORDERS,
+  MOCK_ASSETS,
+  MOCK_USERS,
+  MOCK_REQUESTS,
+  MOCK_WORK_ORDER_TASKS,
+  MOCK_WORK_ORDER_SPARE_PARTS,
+  MOCK_SPARE_PARTS,
+} from './mockData'
 
 export const workOrderService = {
   async getWorkOrders(
@@ -84,8 +92,8 @@ export const workOrderService = {
     return { content, totalElements }
   },
 
-  async getWorkOrderById(id: number): Promise<WorkOrderView> {
-    // const { data } = await api.get<WorkOrderView>(`/work-orders/${id}`)
+  async getWorkOrderById(id: number): Promise<WorkOrderDetailView> {
+    // const { data } = await api.get<WorkOrderDetailView>(`/work-orders/${id}`)
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
@@ -96,6 +104,18 @@ export const workOrderService = {
     const master = MOCK_USERS.find((u) => u.id === wo.masterId)
     const tech = wo.technicianId ? MOCK_USERS.find((u) => u.id === wo.technicianId) : null
     const req = wo.requestId ? MOCK_REQUESTS.find((r) => r.id === wo.requestId) : null
+
+    const tasks = MOCK_WORK_ORDER_TASKS.filter((t) => t.workOrderId === id && !t.isDeleted)
+
+    const spareParts = MOCK_WORK_ORDER_SPARE_PARTS.filter(
+      (sp) => sp.workOrderId === id && !sp.isDeleted,
+    ).map((sp) => {
+      const part = MOCK_SPARE_PARTS.find((p) => p.id === sp.sparePartId)
+      return {
+        ...sp,
+        sparePartName: part ? `${part.name} (${part.article})` : 'Неизвестно',
+      }
+    })
 
     return {
       ...wo,
@@ -120,12 +140,9 @@ export const workOrderService = {
             role: tech.role,
           }
         : null,
-      request: req
-        ? {
-            id: req.id,
-            status: req.status,
-          }
-        : null,
+      request: req ? { id: req.id, status: req.status } : null,
+      tasks,
+      spareParts,
     }
   },
 }

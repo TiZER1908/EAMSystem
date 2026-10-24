@@ -19,6 +19,8 @@ import type {
   MonitoringData,
   RequestPriority,
   ReportData,
+  WorkOrderTask,
+  WorkOrderSparePart,
 } from './models'
 
 export const MOCK_ASSET_TYPES: AssetType[] = [
@@ -278,12 +280,13 @@ export const MOCK_WORK_ORDERS: WorkOrder[] = Array.from({ length: 80 }, (_, i) =
     'CANCELLED',
   ]
   const isDraft = i % 6 === 0
+  const users: number[] = [3, 4, 8]
   return {
     id: 201 + i,
     requestId: i % 2 === 0 ? 101 + i : null,
     assetId: (i % 25) + 1,
     masterId: i % 2 === 0 ? 2 : 6,
-    technicianId: isDraft ? null : (i % 3) + 3,
+    technicianId: isDraft ? null : (users[i % 3] ?? 0),
     status: statuses[i % 6] as WorkOrderStatus,
     plannedStartDate: `2026-10-${String((i % 28) + 1).padStart(2, '0')}`,
     plannedEndDate: `2026-10-${String((i % 28) + 2).padStart(2, '0')}`,
@@ -531,3 +534,90 @@ export const MOCK_REPORT_ASSET_HISTORY: ReportData = {
     ['Конвейер ленточный', '01.10.2026', '#199', 'Сидоров С.', 'Закрыт'],
   ],
 }
+
+export const MOCK_WORK_ORDER_TASKS: WorkOrderTask[] = [
+  {
+    id: 1,
+    workOrderId: 201,
+    name: 'Диагностика оборудования',
+    volume: null,
+    isCompleted: false,
+    completedAt: null,
+    sortOrder: 0,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+  {
+    id: 2,
+    workOrderId: 201,
+    name: 'Замена изношенных деталей',
+    volume: null,
+    isCompleted: false,
+    completedAt: null,
+    sortOrder: 1,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+  {
+    id: 3,
+    workOrderId: 202,
+    name: 'Проверка генератора',
+    volume: null,
+    isCompleted: true,
+    completedAt: '2026-10-17T10:00:00',
+    sortOrder: 0,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+  {
+    id: 4,
+    workOrderId: 203,
+    name: 'Замена масла',
+    volume: '5 л',
+    isCompleted: false,
+    completedAt: null,
+    sortOrder: 0,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+]
+
+export const MOCK_WORK_ORDER_SPARE_PARTS: WorkOrderSparePart[] = [
+  {
+    id: 1,
+    workOrderId: 201,
+    sparePartId: 1,
+    plannedQuantity: 2,
+    actualQuantity: null,
+    isPlanned: true,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+  {
+    id: 2,
+    workOrderId: 201,
+    sparePartId: 3,
+    plannedQuantity: 5,
+    actualQuantity: null,
+    isPlanned: true,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+  {
+    id: 3,
+    workOrderId: 202,
+    sparePartId: 2,
+    plannedQuantity: 1,
+    actualQuantity: 1,
+    isPlanned: true,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+  },
+]

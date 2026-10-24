@@ -299,6 +299,11 @@ export interface AssetHistoryView extends AssetHistory {
   user: UserShort | null
 }
 
+export interface WorkOrderDetailView extends WorkOrderView {
+  tasks: WorkOrderTask[]
+  spareParts: (WorkOrderSparePart & { sparePartName: string })[]
+}
+
 export interface RecentRequest {
   id: number
   assetName: string
