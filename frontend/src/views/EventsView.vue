@@ -2,13 +2,14 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { eventsService } from '@/services/eventsService'
-import type { AuditLog } from '@/services/models'
+import type { AuditLogView } from '@/services/models'
+import { formatShortFIO } from '@/utils/formatters'
 
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 const canView = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
-const events = ref<AuditLog[]>([])
+const events = ref<AuditLogView[]>([])
 const totalElements = ref(0)
 const loading = ref(true)
 
@@ -166,7 +167,14 @@ function actionClass(action: string): string {
             </tr>
             <tr v-for="event in events" :key="event.id" class="table-row">
               <td class="table-cell--muted">{{ formatDate(event.createdAt) }}</td>
-              <td class="table-cell--bold">{{ event.userId }}</td>
+              <td class="table-cell--bold">
+                <span v-if="event.user">
+                  <router-link :to="`/users/${event.userId}`" class="table-link" @click.stop>
+                    {{ formatShortFIO(event.user) }}
+                  </router-link>
+                </span>
+                <span v-else>Система</span>
+              </td>
               <td>
                 <span class="badge" :class="actionClass(event.action)">
                   {{ actionLabel(event.action) }}

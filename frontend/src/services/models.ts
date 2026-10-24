@@ -304,6 +304,10 @@ export interface WorkOrderDetailView extends WorkOrderView {
   spareParts: (WorkOrderSparePart & { sparePartName: string })[]
 }
 
+export interface AuditLogView extends AuditLog {
+  user: UserShort | null
+}
+
 export interface RecentRequest {
   id: number
   assetName: string
