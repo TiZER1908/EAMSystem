@@ -266,6 +266,8 @@ export const MOCK_REQUESTS: Request[] = Array.from({ length: 120 }, (_, i) => {
   }
 })
 
+MOCK_REQUESTS[0]!.authorId = 1
+
 export const MOCK_WORK_ORDERS: WorkOrder[] = Array.from({ length: 80 }, (_, i) => {
   const statuses: WorkOrder['status'][] = [
     'DRAFT',

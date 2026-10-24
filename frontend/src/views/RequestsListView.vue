@@ -4,7 +4,9 @@ import { useAuthStore } from '@/stores/auth'
 import { requestService } from '@/services/requestService'
 import type { RequestView, RequestStatus, RequestPriority } from '@/services/models.ts'
 import { formatShortFIO } from '@/utils/formatters'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
@@ -118,7 +120,9 @@ function formatDate(dateStr: string): string {
         </p>
       </div>
 
-      <button v-if="canCreate" class="btn btn--primary"><span>+</span> Создать заявку</button>
+      <button v-if="canCreate" class="btn btn--primary" @click="router.push('/requests/new')">
+        <span>+</span> Создать заявку
+      </button>
     </div>
 
     <div class="requests__filters">
@@ -165,7 +169,12 @@ function formatDate(dateStr: string): string {
           <tr v-if="requests.length === 0">
             <td colspan="7" class="table-empty">Заявки не найдены</td>
           </tr>
-          <tr v-for="req in requests" :key="req.id" class="table-row">
+          <tr
+            v-for="req in requests"
+            :key="req.id"
+            class="table-row table-row--clickable"
+            @click="router.push(`/requests/${req.id}`)"
+          >
             <td class="table-cell--mono">#{{ req.id }}</td>
             <td>
               <div class="table-cell--bold">
@@ -477,5 +486,9 @@ function formatDate(dateStr: string): string {
 .table-link:hover {
   color: #3b82f6;
   text-decoration: underline;
+}
+
+.table-row--clickable {
+  cursor: pointer;
 }
 </style>

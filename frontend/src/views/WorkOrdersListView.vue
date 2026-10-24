@@ -160,7 +160,12 @@ function formatDate(dateStr: string): string {
               </div>
             </td>
             <td class="table-cell--muted">
-              {{ wo.requestId ? `#${wo.requestId}` : 'ППР' }}
+              <span v-if="wo.requestId">
+                <router-link :to="`/requests/${wo.requestId}`" class="table-link" @click.stop>
+                  {{ `#${wo.requestId}` }}
+                </router-link>
+              </span>
+              <span v-else> ППР </span>
             </td>
             <td class="table-cell--bold">
               <router-link :to="`/users/${wo.master.id}`" class="table-link" @click.stop>

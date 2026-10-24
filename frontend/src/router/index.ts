@@ -19,6 +19,8 @@ const LoginView = () => import('@/views/LoginView.vue')
 const NotFoundView = () => import('@/views/NotFoundView.vue')
 const AssetDetailView = () => import('@/views/AssetDetailView.vue')
 const AssetEditView = () => import('@/views/AssetEditView.vue')
+const RequestDetailView = () => import('@/views/RequestDetailView.vue')
+const RequestCreateView = () => import('@/views/RequestCreateView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -63,6 +65,18 @@ const routes: RouteRecordRaw[] = [
         name: 'requests',
         component: RequestsListView,
         meta: { title: 'Заявки', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+      },
+      {
+        path: 'requests/:id',
+        name: 'request-delail',
+        component: RequestDetailView,
+        meta: { title: 'Карточка заявки', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+      },
+      {
+        path: 'requests/new',
+        name: 'request-new',
+        component: RequestCreateView,
+        meta: { title: 'Создание заявки', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
       },
       {
         path: 'work-orders',
