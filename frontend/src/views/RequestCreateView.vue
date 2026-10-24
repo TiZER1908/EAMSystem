@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-//import { useAuthStore } from '@/stores/auth'
 import { assetService } from '@/services/assetService'
 import type { AssetView, RequestPriority } from '@/services/models'
 
@@ -11,7 +10,6 @@ import IconFile from '@/assets/icons/file.svg?component'
 
 const route = useRoute()
 const router = useRouter()
-//const authStore = useAuthStore
 
 const form = ref({
   assetId: 0,

@@ -49,6 +49,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'Активы', roles: ['ADMIN', 'MASTER', 'TECHNICIAN'] },
       },
       {
+        path: 'assets/new',
+        name: 'asset-create',
+        component: () => import('@/views/AssetCreateView.vue'),
+        meta: { title: 'Новый актив', roles: ['ADMIN', 'MASTER'] },
+      },
+      {
         path: 'assets/:id',
         name: 'asset-detail',
         component: AssetDetailView,
@@ -76,7 +82,7 @@ const routes: RouteRecordRaw[] = [
         path: 'requests/new',
         name: 'request-new',
         component: RequestCreateView,
-        meta: { title: 'Создание заявки', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+        meta: { title: 'Новая заявка', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
       },
       {
         path: 'work-orders',

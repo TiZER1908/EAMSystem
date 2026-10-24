@@ -93,7 +93,9 @@ function formatDate(date: string): string {
         <p class="assets__subtitle">Всего единиц: {{ totalElements }}</p>
       </div>
 
-      <button v-if="canCreate" class="btn btn--primary"><span>+</span> Создать актив</button>
+      <button v-if="canCreate" class="btn btn--primary" @click="router.push('/assets/new')">
+        <span>+</span> Создать актив
+      </button>
     </div>
 
     <div class="assets__filters">
