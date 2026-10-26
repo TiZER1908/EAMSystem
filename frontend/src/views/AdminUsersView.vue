@@ -5,7 +5,9 @@ import { userService } from '@/services/userService'
 import type { User, UserRole, UserStatus } from '@/services/models.ts'
 
 import IconPlus from '@/assets/icons/users.svg?component'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 const canView = computed(() => role.value === 'ADMIN')
@@ -113,7 +115,7 @@ async function toggleBlock(user: User) {
           <h1 class="users__title">Пользователи</h1>
           <p class="users__subtitle">Всего учётных записей: {{ totalElements }}</p>
         </div>
-        <button class="btn btn--primary">
+        <button class="btn btn--primary" @click="router.push('/admin/users/new')">
           <IconPlus class="btn-icon" />
           Создать пользователя
         </button>

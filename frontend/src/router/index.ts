@@ -24,8 +24,10 @@ const RequestCreateView = () => import('@/views/RequestCreateView.vue')
 const WorkOrderDetailView = () => import('@/views/WorkOrderDetailView.vue')
 const AssetCreateView = () => import('@/views/AssetCreateView.vue')
 const WorkOrderCreateView = () => import('@/views/WorkOrderCreateView.vue')
+const SparePartCreateView = () => import('@/views/SparePartCreateView.vue')
 const SparePartDetailView = () => import('@/views/SparePartDetailView.vue')
 const SparePartEditView = () => import('@/views/SparePartEditView.vue')
+const AdminUserCreateView = () => import('@/views/AdminUserCreateView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -116,7 +118,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'spare-parts/new',
         name: 'spare-part-create',
-        component: () => import('@/views/SparePartCreateView.vue'),
+        component: SparePartCreateView,
         meta: { title: 'Новая запчасть', roles: ['ADMIN', 'MASTER'] },
       },
       {
@@ -154,6 +156,12 @@ const routes: RouteRecordRaw[] = [
         name: 'admin-users',
         component: AdminUsersView,
         meta: { title: 'Пользователи', roles: ['ADMIN'] },
+      },
+      {
+        path: 'admin/users/new',
+        name: 'admin-user-create',
+        component: AdminUserCreateView,
+        meta: { title: 'Новый пользователь', roles: ['ADMIN'] },
       },
       {
         path: 'admin/dictionaries',

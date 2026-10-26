@@ -113,4 +113,31 @@ export const userService = {
     // await api.post(`/users/${id}/change-password`, payload)
     await new Promise((r) => setTimeout(r, 300))
   },
+
+  async createUser(payload: Partial<User> & { password?: string }): Promise<User> {
+    // const { data } = await api.post<User>('/users', payload)
+    // return data
+
+    await new Promise((r) => setTimeout(r, 500))
+
+    const newUser: User = {
+      id: Date.now(),
+      username: payload.username || '',
+      email: payload.email || '',
+      passwordHash: 'hash',
+      lastName: payload.lastName || '',
+      firstName: payload.firstName || '',
+      middleName: payload.middleName || null,
+      phone: payload.phone || null,
+      role: payload.role || 'REQUESTER',
+      status: 'ACTIVE',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isDeleted: false,
+      deletedAt: null,
+      deletedBy: null,
+    }
+
+    return newUser
+  },
 }
