@@ -24,6 +24,8 @@ const RequestCreateView = () => import('@/views/RequestCreateView.vue')
 const WorkOrderDetailView = () => import('@/views/WorkOrderDetailView.vue')
 const AssetCreateView = () => import('@/views/AssetCreateView.vue')
 const WorkOrderCreateView = () => import('@/views/WorkOrderCreateView.vue')
+const SparePartDetailView = () => import('@/views/SparePartDetailView.vue')
+const SparePartEditView = () => import('@/views/SparePartEditView.vue')
 
 const routes: RouteRecordRaw[] = [
   {
@@ -110,6 +112,24 @@ const routes: RouteRecordRaw[] = [
         name: 'spare-parts',
         component: SparePartsListView,
         meta: { title: 'Запчасти', roles: ['ADMIN', 'MASTER'] },
+      },
+      {
+        path: 'spare-parts/new',
+        name: 'spare-part-create',
+        component: () => import('@/views/SparePartCreateView.vue'),
+        meta: { title: 'Новая запчасть', roles: ['ADMIN', 'MASTER'] },
+      },
+      {
+        path: 'spare-parts/:id',
+        name: 'spare-part-detail',
+        component: SparePartDetailView,
+        meta: { title: 'Карточка запчасти', roles: ['ADMIN', 'MASTER', 'TECHNICIAN'] },
+      },
+      {
+        path: 'spare-parts/:id/edit',
+        name: 'spare-part-edit',
+        component: SparePartEditView,
+        meta: { title: 'Редактирование запчасти', roles: ['ADMIN', 'MASTER'] },
       },
       {
         path: 'events',

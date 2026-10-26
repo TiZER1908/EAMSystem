@@ -26,7 +26,7 @@ const size = ref(10)
 async function loadRequests() {
   loading.value = true
   try {
-    const currentUserId = canSeeAll.value ? undefined : 1
+    const currentUserId = canSeeAll.value ? undefined : authStore.user.id
 
     const result = await requestService.getRequests({
       search: search.value,

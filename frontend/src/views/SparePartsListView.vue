@@ -6,7 +6,9 @@ import type { SparePartView, SparePartStatus } from '@/services/models.ts'
 
 import IconEdit from '@/assets/icons/edit.svg?component'
 import IconArchive from '@/assets/icons/archive.svg?component'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
@@ -82,21 +84,20 @@ function stockClass(quantity: number) {
 
 <template>
   <div class="spare-parts">
-    <!-- Заглушка для тех, кому нельзя -->
     <div v-if="!canView" class="no-access">У вас нет доступа к этому разделу.</div>
 
     <template v-else>
-      <!-- Заголовок -->
       <div class="spare-parts__header">
         <div>
           <h1 class="spare-parts__title">Запчасти</h1>
           <p class="spare-parts__subtitle">Всего в справочнике: {{ totalElements }}</p>
         </div>
 
-        <button v-if="canEdit" class="btn btn--primary"><span>+</span> Добавить запчасть</button>
+        <button v-if="canEdit" class="btn btn--primary" @click="router.push('/spare-parts/new')">
+          <span>+</span> Добавить запчасть
+        </button>
       </div>
 
-      <!-- Фильтры -->
       <div class="spare-parts__filters">
         <div class="filter-group" style="width: 100%; max-width: 400px">
           <label class="filter-label">Поиск</label>
@@ -109,7 +110,6 @@ function stockClass(quantity: number) {
         </div>
       </div>
 
-      <!-- Таблица -->
       <div class="table-wrapper">
         <div v-if="loading" class="table-loading">Загрузка данных...</div>
 
@@ -129,7 +129,12 @@ function stockClass(quantity: number) {
             <tr v-if="spareParts.length === 0">
               <td :colspan="canEdit ? 7 : 6" class="table-empty">Запчасти не найдены</td>
             </tr>
-            <tr v-for="sp in spareParts" :key="sp.id" class="table-row">
+            <tr
+              v-for="sp in spareParts"
+              :key="sp.id"
+              class="table-row table-row--clickable"
+              @click="router.push(`/spare-parts/${sp.id}`)"
+            >
               <td class="table-cell--mono">{{ sp.article || '—' }}</td>
               <td class="table-cell--bold">{{ sp.name }}</td>
               <td>{{ sp.category?.name || '—' }}</td>
@@ -145,7 +150,11 @@ function stockClass(quantity: number) {
                 </span>
               </td>
               <td v-if="canEdit" class="actions-col">
-                <button class="action-btn" title="Редактировать">
+                <button
+                  class="action-btn"
+                  title="Редактировать"
+                  @click.stop="router.push(`/spare-parts/${sp.id}/edit`)"
+                >
                   <component :is="IconEdit" class="action-btn__icon" />
                 </button>
                 <button v-if="canDelete" class="action-btn action-btn--danger" title="Архивировать">
@@ -157,7 +166,6 @@ function stockClass(quantity: number) {
         </table>
       </div>
 
-      <!-- Пагинация -->
       <div v-if="totalPages > 1" class="pagination">
         <button class="pagination__btn" :disabled="page === 1" @click="prevPage">← Назад</button>
         <span class="pagination__info">Страница {{ page }} из {{ totalPages }}</span>
@@ -430,5 +438,9 @@ function stockClass(quantity: number) {
 .pagination__info {
   font-size: 13px;
   color: #64748b;
+}
+
+.table-row--clickable {
+  cursor: pointer;
 }
 </style>

@@ -93,7 +93,6 @@ function formatDate(dateStr: string): string {
 
 <template>
   <div class="work-orders">
-    <!-- Заголовок и кнопка создания -->
     <div class="work-orders__header">
       <div>
         <h1 class="work-orders__title">Наряды</h1>

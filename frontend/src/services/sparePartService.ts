@@ -1,5 +1,11 @@
 import type { SparePartFilter, SparePartView } from './models.ts'
-import { MOCK_SPARE_PARTS, MOCK_SPARE_PART_CATEGORIES, MOCK_UNITS } from './mockData'
+import {
+  MOCK_SPARE_PARTS,
+  MOCK_SPARE_PART_CATEGORIES,
+  MOCK_UNITS,
+  MOCK_WORK_ORDER_SPARE_PARTS,
+  MOCK_WORK_ORDERS,
+} from './mockData'
 
 export const sparePartService = {
   async getSpareParts(
@@ -40,7 +46,7 @@ export const sparePartService = {
       return {
         ...sp,
         category: category ? { id: category.id, name: category.name } : null,
-        unit: unit ? { id: unit.id, name: unit.name } : null,
+        unit: unit ? { id: unit.id, name: unit.name, shortName: unit.shortName } : null,
       }
     })
 
@@ -61,7 +67,31 @@ export const sparePartService = {
     return {
       ...sp,
       category: category ? { id: category.id, name: category.name } : null,
-      unit: unit ? { id: unit.id, name: unit.name } : null,
+      unit: unit ? { id: unit.id, name: unit.name, shortName: unit.shortName } : null,
     }
+  },
+  async getSparePartUsage(
+    id: number,
+  ): Promise<{ workOrderId: number; date: string; quantity: number }[]> {
+    // const { data } = await api.get(`/spare-parts/${id}/usage`)
+    // return data
+
+    await new Promise((r) => setTimeout(r, 200))
+
+    const usage: { workOrderId: number; date: string; quantity: number }[] = []
+    MOCK_WORK_ORDER_SPARE_PARTS.filter((sp) => sp.sparePartId === id && !sp.isDeleted).forEach(
+      (sp) => {
+        const wo = MOCK_WORK_ORDERS.find((w) => w.id === sp.workOrderId)
+        if (wo) {
+          usage.push({
+            workOrderId: wo.id,
+            date: wo.createdAt,
+            quantity: sp.actualQuantity || sp.plannedQuantity || 0,
+          })
+        }
+      },
+    )
+
+    return usage
   },
 }
