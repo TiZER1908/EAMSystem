@@ -9,26 +9,19 @@ import type { AssetType, Location, Unit, SparePartCategory, DictionaryShort } fr
 
 export const dictionaryService = {
   async getAssetTypes(): Promise<AssetType[]> {
-    // const { data } = await api.get<AssetType[]>('/dictionaries/asset-types')
-    // return data
-    await new Promise((r) => setTimeout(r, 200))
-    return MOCK_ASSET_TYPES
+    const { data } = await api.get<AssetType[]>('/dictionaries/asset-types')
+    return data
   },
   async createAssetType(payload: Partial<AssetType>): Promise<AssetType> {
-    // const { data } = await api.post<AssetType>('/dictionaries/asset-types', payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id: Date.now(), name: payload.name || '', description: payload.description || null }
+    const { data } = await api.post<AssetType>('/dictionaries/asset-types', payload)
+    return data
   },
   async updateAssetType(id: number, payload: Partial<AssetType>): Promise<AssetType> {
-    // const { data } = await api.put<AssetType>(`/dictionaries/asset-types/${id}`, payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id, name: payload.name || '', description: payload.description || null }
+    const { data } = await api.put<AssetType>(`/dictionaries/asset-types/${id}`, payload)
+    return data
   },
   async deleteAssetType(id: number): Promise<void> {
-    // await api.delete(`/dictionaries/asset-types/${id}`)
-    await new Promise((r) => setTimeout(r, 300))
+    await api.delete(`/dictionaries/asset-types/${id}`)
   },
 
   async getLocations(): Promise<Location[]> {

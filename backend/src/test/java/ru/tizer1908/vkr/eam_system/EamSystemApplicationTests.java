@@ -1,4 +1,4 @@
-package ru.tizer_tgpa.vkr.eam_system;
+package ru.tizer1908.vkr.eam_system;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

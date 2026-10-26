@@ -8,7 +8,7 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ru.tizer-tgpa.vkr</groupId>
+	<groupId>ru.tizer1908.vkr</groupId>
 	<artifactId>eam-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
