@@ -1,0 +1,1 @@
+psql -f /home/postgres/init-scripts/dump.sql

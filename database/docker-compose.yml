@@ -123,6 +123,7 @@ services:
     volumes:
       - pg1_data:/var/lib/postgresql/18/docker
       - ./patroni/patroni-pg1.yml:/home/postgres/patroni.yml:ro
+      - ./init:/home/postgres/init-scripts:ro
 
   pg2:
     build:
@@ -150,6 +151,7 @@ services:
     volumes:
       - pg2_data:/var/lib/postgresql/18/docker
       - ./patroni/patroni-pg2.yml:/home/postgres/patroni.yml:ro
+      - ./init:/home/postgres/init-scripts:ro
 
   pg3:
     build:
@@ -177,6 +179,7 @@ services:
     volumes:
       - pg3_data:/var/lib/postgresql/18/docker
       - ./patroni/patroni-pg3.yml:/home/postgres/patroni.yml:ro
+      - ./init:/home/postgres/init-scripts:ro
 
   haproxy:
     image: haproxy:2.8

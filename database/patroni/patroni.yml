@@ -20,6 +20,7 @@ bootstrap:
   pg_hba:                            
     - host replication replicator 0.0.0.0/0 md5
     - host all all 0.0.0.0/0 md5
+  post_bootstrap: /home/postgres/init-scripts/01-init.sh
 
 postgresql:
   listen: 0.0.0.0:5432
