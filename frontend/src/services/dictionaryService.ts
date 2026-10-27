@@ -25,84 +25,59 @@ export const dictionaryService = {
   },
 
   async getLocations(): Promise<Location[]> {
-    // const { data } = await api.get<Location[]>('/dictionaries/locations')
-    // return data
-    await new Promise((r) => setTimeout(r, 200))
-    return MOCK_LOCATIONS
+    const { data } = await api.get<Location[]>('/dictionaries/locations')
+    return data
   },
   async createLocation(payload: Partial<Location>): Promise<Location> {
-    // const { data } = await api.post<Location>('/dictionaries/locations', payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return {
-      id: Date.now(),
-      name: payload.name || '',
-      parentLocationId: payload.parentLocationId || null,
-      description: payload.description || null,
-    }
+    const { data } = await api.post<Location>('/dictionaries/locations', payload)
+    return data
   },
   async updateLocation(id: number, payload: Partial<Location>): Promise<Location> {
-    // const { data } = await api.put<Location>(`/dictionaries/locations/${id}`, payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return {
-      id,
-      name: payload.name || '',
-      parentLocationId: payload.parentLocationId || null,
-      description: payload.description || null,
-    }
+    const { data } = await api.put<Location>(`/dictionaries/locations/${id}`, payload)
+    return data
   },
   async deleteLocation(id: number): Promise<void> {
-    // await api.delete(`/dictionaries/locations/${id}`)
-    await new Promise((r) => setTimeout(r, 300))
+    await api.delete(`/dictionaries/locations/${id}`)
   },
 
   async getUnits(): Promise<Unit[]> {
-    // const { data } = await api.get<Unit[]>('/dictionaries/units')
-    // return data
-    await new Promise((r) => setTimeout(r, 200))
-    return MOCK_UNITS
+    const { data } = await api.get<Unit[]>('/dictionaries/units')
+    return data
   },
   async createUnit(payload: Partial<Unit>): Promise<Unit> {
-    // const { data } = await api.post<Unit>('/dictionaries/units', payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id: Date.now(), name: payload.name || '', shortName: payload.shortName || '' }
+    const { data } = await api.post<Unit>('/dictionaries/units', payload)
+    return data
   },
   async updateUnit(id: number, payload: Partial<Unit>): Promise<Unit> {
-    // const { data } = await api.put<Unit>(`/dictionaries/units/${id}`, payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id, name: payload.name || '', shortName: payload.shortName || '' }
+    const { data } = await api.put<Unit>(`/dictionaries/units/${id}`, payload)
+    return data
   },
   async deleteUnit(id: number): Promise<void> {
-    // await api.delete(`/dictionaries/units/${id}`)
-    await new Promise((r) => setTimeout(r, 300))
+    await api.delete(`/dictionaries/units/${id}`)
   },
 
   async getSparePartCategories(): Promise<SparePartCategory[]> {
-    // const { data } = await api.get<SparePartCategory[]>('/dictionaries/spare-part-categories')
-    // return data
-    await new Promise((r) => setTimeout(r, 200))
-    return MOCK_SPARE_PART_CATEGORIES
+    const { data } = await api.get<SparePartCategory[]>('/dictionaries/spare-part-categories')
+    return data
   },
   async createSparePartCategory(payload: Partial<SparePartCategory>): Promise<SparePartCategory> {
-    // const { data } = await api.post<SparePartCategory>('/dictionaries/spare-part-categories', payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id: Date.now(), name: payload.name || '' }
+    const { data } = await api.post<SparePartCategory>(
+      '/dictionaries/spare-part-categories',
+      payload,
+    )
+    return data
   },
   async updateSparePartCategory(
     id: number,
     payload: Partial<SparePartCategory>,
   ): Promise<SparePartCategory> {
-    // const { data } = await api.put<SparePartCategory>(`/dictionaries/spare-part-categories/${id}`, payload)
-    // return data
-    await new Promise((r) => setTimeout(r, 300))
-    return { id, name: payload.name || '' }
+    const { data } = await api.put<SparePartCategory>(
+      `/dictionaries/spare-part-categories/${id}`,
+      payload,
+    )
+    return data
   },
   async deleteSparePartCategory(id: number): Promise<void> {
-    // await api.delete(`/dictionaries/spare-part-categories/${id}`)
-    await new Promise((r) => setTimeout(r, 300))
+    await api.delete(`/dictionaries/spare-part-categories/${id}`)
   },
 }

@@ -31,11 +31,11 @@ public class AssetTypeServiceImpl implements AssetTypeService {
 	}
 
 	@Override
-	public AssetType updateAssetType(Long id, AssetTypeDto assetTypeDto) {
+	public AssetType updateAssetType(Long id, AssetTypeDto dto) {
 		AssetType assetType = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Тип оборудования не найден"));
-		assetType.setName(assetTypeDto.getName());
-		assetType.setDescription(assetTypeDto.getDescription());
+		assetType.setName(dto.getName());
+		assetType.setDescription(dto.getDescription());
 		return repository.save(assetType);
 	}
 

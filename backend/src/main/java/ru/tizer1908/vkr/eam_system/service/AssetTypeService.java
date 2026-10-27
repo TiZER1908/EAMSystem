@@ -7,7 +7,7 @@ import ru.tizer1908.vkr.eam_system.model.AssetType;
 
 public interface AssetTypeService {
 	List<AssetType> getAllAssetTypes();
-    AssetType createAssetType(AssetTypeDto dto);
+    AssetType createAssetType(AssetTypeDto assetTypeDto);
     AssetType updateAssetType(Long id, AssetTypeDto assetTypeDto);
     void deleteAssetType(Long id);
 }

@@ -194,7 +194,6 @@ watch(activeTab, () => {
             </tr>
           </thead>
           <tbody>
-            <!-- Строка создания -->
             <tr v-if="isCreating" class="table-row table-row--editing">
               <td class="table-cell--mono">new</td>
               <td>
@@ -225,6 +224,9 @@ watch(activeTab, () => {
                   </option>
                 </select>
               </td>
+              <td v-else-if="activeTab === 'SPARE_PART_CATEGORIES'">
+                <input type="text" class="form__input" placeholder="Описание" disabled />
+              </td>
               <td v-else>
                 <input
                   v-model="createForm.description"
@@ -251,7 +253,6 @@ watch(activeTab, () => {
               <td colspan="5" class="table-empty">Записи не найдены</td>
             </tr>
 
-            <!-- Строки таблицы -->
             <tr v-for="item in items" :key="item.id" class="table-row">
               <template v-if="editingId === item.id">
                 <td class="table-cell--mono">{{ item.id }}</td>
