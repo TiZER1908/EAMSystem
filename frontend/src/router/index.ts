@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import AppLayout from '@/components/layout/AppLayout.vue'
 
-const DashboardView = () => import('@/views/dashboard/DashboardView.vue')
+const MainView = () => import('@/views/MainView.vue')
 const AssetsListView = () => import('@/views/assets/AssetsListView.vue')
 const RequestsListView = () => import('@/views/requests/RequestsListView.vue')
 const WorkOrdersListView = () => import('@/views/work-orders/WorkOrdersListView.vue')
@@ -40,14 +40,14 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: AppLayout,
-    redirect: '/dashboard',
+    redirect: '/',
     meta: { requiresAuth: true },
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: DashboardView,
-        meta: { title: 'Дашборд', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
+        path: '/',
+        name: 'main',
+        component: MainView,
+        meta: { title: 'Главная страница', roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'] },
       },
       {
         path: 'assets',

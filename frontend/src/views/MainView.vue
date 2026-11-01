@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { dashboardService } from '@/services/dashboardService'
-import type { KpiCard, RecentRequest, AuditLog, SystemStatusItem } from '@/services/models.ts'
+import { mainService } from '@/services/mainService'
+import type { RecentRequest, AuditLog, SystemStatusItem } from '@/services/models.ts'
 
-import IconAssets from '@/assets/icons/assets.svg?component'
 import IconRequests from '@/assets/icons/requests.svg?component'
-import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
 
 import IconAlert from '@/assets/icons/alert.svg?component'
 import IconSuccess from '@/assets/icons/success.svg?component'
@@ -14,7 +12,6 @@ import IconSuccess from '@/assets/icons/success.svg?component'
 const authStore = useAuthStore
 const role = computed(() => authStore.user.role)
 
-const kpiCards = ref<KpiCard[]>([])
 const recentRequests = ref<RecentRequest[]>([])
 const events = ref<AuditLog[]>([])
 const systemStatus = ref<SystemStatusItem[]>([])
@@ -23,15 +20,11 @@ const loading = ref(true)
 onMounted(async () => {
   loading.value = true
   try {
-    const [kpi, requests, evts, status] = await Promise.all([
-      dashboardService.getKpiCards(),
-      dashboardService.getRecentRequests(),
-      dashboardService.getEvents(),
-      dashboardService.getSystemStatus(),
+    const [requests, evts, status] = await Promise.all([
+      mainService.getRecentRequests(),
+      mainService.getEvents(),
+      mainService.getSystemStatus(),
     ])
-
-    kpiCards.value = kpi.filter((card) => card.roles.includes(role.value))
-
     recentRequests.value = requests
     events.value = evts
     systemStatus.value = status
@@ -102,55 +95,16 @@ function actionClass(action: string): string {
 </script>
 
 <template>
-  <div class="dashboard">
-    <div class="dashboard__welcome">
-      <h1 class="dashboard__greeting">{{ greeting }}, {{ authStore.user.fullName }}!</h1>
-      <p class="dashboard__date">{{ today }}</p>
+  <div class="main">
+    <div class="main__welcome">
+      <h1 class="main__greeting">{{ greeting }}, {{ authStore.user.fullName }}!</h1>
+      <p class="main__date">{{ today }}</p>
     </div>
 
-    <div v-if="loading" class="dashboard__loading">Загрузка данных...</div>
+    <div v-if="loading" class="main__loading">Загрузка данных...</div>
 
     <template v-else>
-      <div class="dashboard__kpi-grid">
-        <div
-          v-for="card in kpiCards"
-          :key="card.id"
-          class="kpi-card"
-          :class="`kpi-card--${card.color}`"
-        >
-          <component
-            v-if="card.id == 'assets'"
-            :is="IconAssets"
-            class="kpi-card__icon"
-            :class="`kpi-card--blue__icon`"
-          />
-          <component
-            v-if="card.id == 'requests'"
-            :is="IconRequests"
-            class="kpi-card__icon"
-            :class="`kpi-card--orange__icon`"
-          />
-          <component
-            v-if="card.id == 'work-orders'"
-            :is="IconWorkOrders"
-            class="kpi-card__icon"
-            :class="`kpi-card--green__icon`"
-          />
-          <component
-            v-if="card.id == 'overdue'"
-            :is="IconAlert"
-            class="kpi-card__icon"
-            :class="`kpi-card--red__icon`"
-          />
-          <div class="kpi-card__body">
-            <div class="kpi-card__value">{{ card.value }}</div>
-            <div class="kpi-card__label">{{ card.label }}</div>
-            <div class="kpi-card__subtitle">{{ card.subtitle }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard__columns">
+      <div class="main__columns">
         <section class="card">
           <div class="card__header">
             <h2 class="card__title">Последние заявки</h2>
@@ -239,32 +193,32 @@ function actionClass(action: string): string {
 </template>
 
 <style scoped>
-.dashboard {
+.main {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
 }
 
-.dashboard__welcome {
+.main__welcome {
   margin-bottom: 4px;
 }
 
-.dashboard__greeting {
+.main__greeting {
   font-size: 24px;
   font-weight: 700;
   color: #1e293b;
   margin: 0 0 4px;
 }
 
-.dashboard__date {
+.main__date {
   font-size: 14px;
   color: #64748b;
   margin: 0;
   text-transform: capitalize;
 }
 
-.dashboard__loading {
+.main__loading {
   padding: 40px;
   text-align: center;
   color: #94a3b8;
@@ -273,7 +227,7 @@ function actionClass(action: string): string {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.dashboard__kpi-grid {
+.main__kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
@@ -349,14 +303,14 @@ function actionClass(action: string): string {
   margin-top: 2px;
 }
 
-.dashboard__columns {
+.main__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
 @media (max-width: 1024px) {
-  .dashboard__columns {
+  .main__columns {
     grid-template-columns: 1fr;
   }
 }

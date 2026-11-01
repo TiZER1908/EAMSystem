@@ -14,7 +14,6 @@ import type {
   AssetHistory,
   AssetAttachment,
   AuditLog,
-  KpiCard,
   SystemStatusItem,
   MonitoringData,
   RequestPriority,
@@ -410,41 +409,6 @@ export const MOCK_AUDIT_EVENTS: AuditLog[] = Array.from({ length: 30 }, (_, i) =
   ipAddress: `192.168.1.${i + 10}`,
   createdAt: new Date(Date.now() - i * 600000).toISOString(),
 }))
-
-export const MOCK_DASHBOARD_KPI: KpiCard[] = [
-  {
-    id: 'assets',
-    label: 'Активы',
-    value: MOCK_ASSETS.length,
-    subtitle: 'всего на балансе',
-    color: 'blue',
-    roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
-  },
-  {
-    id: 'requests',
-    label: 'Открытые заявки',
-    value: MOCK_REQUESTS.filter((r) => r.status === 'NEW').length,
-    subtitle: 'ожидают обработки',
-    color: 'orange',
-    roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'],
-  },
-  {
-    id: 'work-orders',
-    label: 'Наряды в работе',
-    value: MOCK_WORK_ORDERS.filter((r) => r.status === 'IN_PROGRESS').length,
-    subtitle: 'выполняются сейчас',
-    color: 'green',
-    roles: ['ADMIN', 'MASTER', 'TECHNICIAN'],
-  },
-  {
-    id: 'overdue',
-    label: 'Просрочено',
-    value: 3,
-    subtitle: 'требуют внимания',
-    color: 'red',
-    roles: ['ADMIN', 'MASTER'],
-  },
-]
 
 export const MOCK_DASHBOARD_EVENTS = MOCK_AUDIT_EVENTS.filter(
   (r) => r.action !== 'LOGIN' && r.action !== 'LOGOUT',

@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth'
 
 import IconLogo from '@/assets/logo.svg?component'
 
-import IconDashboard from '@/assets/icons/dashboard.svg?component'
+import IconMain from '@/assets/icons/home.svg?component'
 import IconAssets from '@/assets/icons/assets.svg?component'
 import IconRequests from '@/assets/icons/requests.svg?component'
 import IconWorkOrders from '@/assets/icons/work-orders.svg?component'
@@ -38,9 +38,9 @@ const allGroups: MenuGroup[] = [
     title: 'Основное',
     items: [
       {
-        path: '/dashboard',
-        label: 'Дашборд',
-        icon: IconDashboard,
+        path: '/',
+        label: 'Главная страница',
+        icon: IconMain,
         roles: ['ADMIN', 'MASTER', 'TECHNICIAN', 'REQUESTER'],
       },
       {

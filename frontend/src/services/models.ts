@@ -317,14 +317,6 @@ export interface RecentRequest {
   time: string
 }
 
-export interface KpiCard {
-  id: string
-  label: string
-  value: number
-  subtitle: string
-  color: 'blue' | 'orange' | 'green' | 'red'
-  roles: string[]
-}
 export interface EventItem {
   id: number
   icon: string
