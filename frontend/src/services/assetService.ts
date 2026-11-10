@@ -15,7 +15,7 @@ export const assetService = {
 
     await new Promise((r) => setTimeout(r, 300))
 
-    let filtered = MOCK_ASSETS.filter((a) => !a.isDeleted)
+    let filtered = MOCK_ASSETS
 
     if (filter.search) {
       const s = filter.search.toLowerCase()
@@ -64,7 +64,7 @@ export const assetService = {
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
-    const asset = MOCK_ASSETS.find((a) => a.id === id && !a.isDeleted)
+    const asset = MOCK_ASSETS.find((a) => a.id === id)
     if (!asset) throw new Error('Asset not found')
 
     const type = MOCK_ASSET_TYPES.find((t) => t.id === asset.assetTypeId)
@@ -116,7 +116,7 @@ export const assetService = {
     // return data
 
     await new Promise((r) => setTimeout(r, 200))
-    return MOCK_ASSET_ATTACHMENTS.filter((att) => att.assetId === id && !att.isDeleted)
+    return MOCK_ASSET_ATTACHMENTS.filter((att) => att.assetId === id)
   },
 
   async updateAsset(id: number, payload: Partial<Asset>): Promise<AssetView> {

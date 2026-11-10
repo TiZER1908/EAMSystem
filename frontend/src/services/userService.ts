@@ -133,9 +133,6 @@ export const userService = {
       status: 'ACTIVE',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      isDeleted: false,
-      deletedAt: null,
-      deletedBy: null,
     }
 
     return newUser

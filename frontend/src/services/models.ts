@@ -9,13 +9,7 @@ export type WorkOrderStatus =
 export type AssetHistoryType = 'CREATED' | 'STATUS_CHANGED' | 'REPAIR' | 'MOVED' | 'COMMENT'
 export type AttachmentType = 'INSTRUCTION' | 'PASSPORT' | 'PHOTO'
 
-export interface BaseEntity {
-  isDeleted: boolean
-  deletedAt: string | null
-  deletedBy: number | null
-}
-
-export interface User extends BaseEntity {
+export interface User {
   id: number
   username: string
   email: string
@@ -54,7 +48,7 @@ export interface Unit {
   shortName: string
 }
 
-export interface Asset extends BaseEntity {
+export interface Asset {
   id: number
   inventoryNumber: string
   name: string
@@ -69,7 +63,7 @@ export interface Asset extends BaseEntity {
   updatedAt: string
 }
 
-export interface AssetAttachment extends BaseEntity {
+export interface AssetAttachment {
   id: number
   assetId: number
   fileName: string
@@ -80,7 +74,7 @@ export interface AssetAttachment extends BaseEntity {
   createdAt: string
 }
 
-export interface Request extends BaseEntity {
+export interface Request {
   id: number
   assetId: number
   authorId: number
@@ -92,7 +86,7 @@ export interface Request extends BaseEntity {
   updatedAt: string
 }
 
-export interface RequestAttachment extends BaseEntity {
+export interface RequestAttachment {
   id: number
   requestId: number
   fileName: string
@@ -102,7 +96,7 @@ export interface RequestAttachment extends BaseEntity {
   createdAt: string
 }
 
-export interface WorkOrder extends BaseEntity {
+export interface WorkOrder {
   id: number
   requestId: number | null
   assetId: number
@@ -118,7 +112,7 @@ export interface WorkOrder extends BaseEntity {
   updatedAt: string
 }
 
-export interface WorkOrderTask extends BaseEntity {
+export interface WorkOrderTask {
   id: number
   workOrderId: number
   name: string
@@ -128,7 +122,7 @@ export interface WorkOrderTask extends BaseEntity {
   sortOrder: number
 }
 
-export interface WorkOrderAttachment extends BaseEntity {
+export interface WorkOrderAttachment {
   id: number
   workOrderId: number
   fileName: string
@@ -138,7 +132,7 @@ export interface WorkOrderAttachment extends BaseEntity {
   createdAt: string
 }
 
-export interface SparePart extends BaseEntity {
+export interface SparePart {
   id: number
   name: string
   article: string | null
@@ -150,7 +144,7 @@ export interface SparePart extends BaseEntity {
   updatedAt: string
 }
 
-export interface WorkOrderSparePart extends BaseEntity {
+export interface WorkOrderSparePart {
   id: number
   workOrderId: number
   sparePartId: number
@@ -159,7 +153,7 @@ export interface WorkOrderSparePart extends BaseEntity {
   isPlanned: boolean
 }
 
-export interface Comment extends BaseEntity {
+export interface Comment {
   id: number
   authorId: number
   requestId: number | null
