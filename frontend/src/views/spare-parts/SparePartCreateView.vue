@@ -8,9 +8,9 @@ import type { SparePartStatus, SparePartCategory, Unit } from '@/services/models
 import IconBack from '@/assets/icons/logout.svg?component'
 
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
-const role = computed(() => authStore.user.role)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
 const form = ref({

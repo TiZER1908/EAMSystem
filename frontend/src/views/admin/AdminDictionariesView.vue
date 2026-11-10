@@ -12,8 +12,8 @@ import IconCancel from '@/assets/icons/x.svg?component'
 
 type AnyDictionaryItem = AssetType | Location | Unit | SparePartCategory
 
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role)
 const canView = computed(() => role.value === 'ADMIN')
 
 const activeTab = ref<'ASSET_TYPES' | 'LOCATIONS' | 'UNITS' | 'SPARE_PART_CATEGORIES'>(

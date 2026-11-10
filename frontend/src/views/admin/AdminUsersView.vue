@@ -8,8 +8,8 @@ import IconPlus from '@/assets/icons/users.svg?component'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role)
 const canView = computed(() => role.value === 'ADMIN')
 
 const users = ref<User[]>([])
@@ -90,7 +90,7 @@ function formatDate(dateStr: string): string {
 }
 
 async function toggleBlock(user: User) {
-  if (user.username === authStore.user.username) {
+  if (user.username === authStore.user?.username) {
     alert('Вы не можете заблокировать собственную учётную запись.')
     return
   }
@@ -189,7 +189,7 @@ async function toggleBlock(user: User) {
               <td class="actions-col">
                 <button
                   class="action-btn"
-                  :disabled="user.username === authStore.user.username"
+                  :disabled="user.username === authStore.user?.username"
                   :title="user.status === 'ACTIVE' ? 'Заблокировать' : 'Разблокировать'"
                   @click="toggleBlock(user)"
                 >

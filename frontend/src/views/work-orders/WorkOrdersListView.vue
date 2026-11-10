@@ -7,8 +7,8 @@ import { formatShortFIO } from '@/utils/formatters'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 
 const canCreate = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 const canSeeAll = computed(() => ['ADMIN', 'MASTER', 'TECHNICIAN'].includes(role.value))

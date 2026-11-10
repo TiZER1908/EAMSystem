@@ -5,8 +5,8 @@ import { eventsService } from '@/services/eventsService'
 import type { AuditLogView } from '@/services/models'
 import { formatShortFIO } from '@/utils/formatters'
 
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canView = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
 const events = ref<AuditLogView[]>([])

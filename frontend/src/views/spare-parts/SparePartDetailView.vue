@@ -10,10 +10,10 @@ import IconEdit from '@/assets/icons/edit.svg?component'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const spId = computed(() => Number(route.params.id))
-const role = computed(() => authStore.user.role)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 const canView = computed(() => ['ADMIN', 'MASTER', 'TECHNICIAN'].includes(role.value))
 

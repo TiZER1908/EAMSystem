@@ -9,8 +9,8 @@ import IconArchive from '@/assets/icons/archive.svg?component'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 
 const canView = computed(() => ['ADMIN', 'MASTER', 'TECHNICIAN'].includes(role.value))
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))

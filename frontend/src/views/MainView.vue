@@ -9,8 +9,8 @@ import IconRequests from '@/assets/icons/requests.svg?component'
 import IconAlert from '@/assets/icons/alert.svg?component'
 import IconSuccess from '@/assets/icons/success.svg?component'
 
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 
 const recentRequests = ref<RecentRequest[]>([])
 const events = ref<AuditLog[]>([])
@@ -97,7 +97,7 @@ function actionClass(action: string): string {
 <template>
   <div class="main">
     <div class="main__welcome">
-      <h1 class="main__greeting">{{ greeting }}, {{ authStore.user.fullName }}!</h1>
+      <h1 class="main__greeting">{{ greeting }}, {{ authStore.user?.fullName }}!</h1>
       <p class="main__date">{{ today }}</p>
     </div>
 

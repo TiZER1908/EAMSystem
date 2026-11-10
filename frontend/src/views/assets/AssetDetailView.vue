@@ -17,9 +17,9 @@ import IconPlus from '@/assets/icons/requests.svg?component'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
-const role = computed(() => authStore.user.role)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 const canCreateRequest = computed(() => true)
 

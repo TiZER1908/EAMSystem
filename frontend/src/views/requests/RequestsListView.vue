@@ -7,8 +7,8 @@ import { formatShortFIO } from '@/utils/formatters'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 
 const canCreate = computed(() => true)
 
@@ -26,7 +26,7 @@ const size = ref(10)
 async function loadRequests() {
   loading.value = true
   try {
-    const currentUserId = canSeeAll.value ? undefined : authStore.user.id
+    const currentUserId = canSeeAll.value ? undefined : authStore.user?.id
 
     const result = await requestService.getRequests({
       search: search.value,

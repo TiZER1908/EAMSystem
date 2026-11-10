@@ -6,7 +6,7 @@ import IconUser from '@/assets/icons/user.svg?component'
 import IconLogout from '@/assets/icons/logout.svg?component'
 import IconNotification from '@/assets/icons/notification.svg?component'
 
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const isProfileMenuOpen = ref(false)
 

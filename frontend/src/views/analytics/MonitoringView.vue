@@ -7,8 +7,8 @@ import type { MonitoringData, MonitoringEvent } from '@/services/models.ts'
 import IconRefresh from '@/assets/icons/monitoring.svg?component'
 import IconAlert from '@/assets/icons/alert.svg?component'
 
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role)
 const canView = computed(() => role.value === 'ADMIN')
 
 const data = ref<MonitoringData | null>(null)

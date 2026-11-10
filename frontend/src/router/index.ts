@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 import AppLayout from '@/components/layout/AppLayout.vue'
 
@@ -202,21 +203,17 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, _from, next) => {
-  // TODO: раскомментировать, когда будет authStore
-  // const authStore = useAuthStore()
-  //
-  // // Проверка авторизации
-  // if (to.meta.requiresAuth !== false && !authStore.isAuthenticated) {
-  //   return next('/login')
-  // }
-  //
-  // // Проверка роли
-  // if (to.meta.roles && !authStore.hasRole(to.meta.roles as any)) {
-  //   return next('/dashboard')
-  // }
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
 
-  next()
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login')
+  } else if (to.path === '/login' && isAuthenticated) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 router.afterEach((to) => {

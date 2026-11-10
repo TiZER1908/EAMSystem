@@ -7,8 +7,8 @@ import type { ReportType, ReportData } from '@/services/models.ts'
 import IconFileText from '@/assets/icons/reports.svg?component'
 import IconDownload from '@/assets/icons/archive.svg?component'
 
-const authStore = useAuthStore
-const role = computed(() => authStore.user.role)
+const authStore = useAuthStore()
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canView = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
 const selectedReport = ref<ReportType>('OPEN_REQUESTS')

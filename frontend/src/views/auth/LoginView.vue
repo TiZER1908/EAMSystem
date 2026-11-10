@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { userService } from '@/services/userService'
-import { MOCK_USERS } from '@/services/mockData'
-import type { User } from '@/services/models.ts'
+import api from '@/services/api'
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
 import IconLogo from '@/assets/logo.svg?component'
 
 const router = useRouter()
@@ -12,8 +12,25 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const error = ref<string | null>(null)
-const profile = ref<User | null>(null)
-const fullName = ref<string | null>(null)
+
+function parseJwt(token: string) {
+  try {
+    const parts = token.split('.')
+    if (parts.length !== 3 || !parts[1]) return null
+    const base64Url = parts[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(''),
+    )
+    return JSON.parse(jsonPayload)
+  } catch {
+    return null
+  }
+}
 
 async function handleLogin() {
   error.value = null
@@ -25,39 +42,56 @@ async function handleLogin() {
 
   loading.value = true
 
-  await new Promise((r) => setTimeout(r, 500))
-
   try {
-    profile.value = await userService.getUserByUsername(username.value)
-    fullName.value = [profile.value.lastName, profile.value.firstName, profile.value.middleName]
-      .filter(Boolean)
-      .join(' ')
-  } catch {
-    error.value = 'Пользователь не найден'
+    const response = await api.post('/auth/login', {
+      username: username.value,
+      password: password.value,
+    })
+
+    const token = response.data.token
+
+    localStorage.setItem('eam_token', token)
+
+    const decoded = parseJwt(token)
+    const role = decoded?.role || decoded?.roles?.[0] || 'REQUESTER'
+    const userName = decoded?.sub || username.value
+
+    authStore.setAuth(token, {
+      username: userName,
+      fullName: userName,
+      role: role.replace('ROLE_', ''),
+    })
+
+    router.push('/')
+  } catch (err: unknown) {
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'response' in err &&
+      (err as { response: { status: number } }).response?.status === 401
+    ) {
+      error.value = 'Неверный логин или пароль'
+    } else {
+      error.value = 'Ошибка сервера. Попробуйте позже.'
+    }
   } finally {
     loading.value = false
   }
-
-  localStorage.setItem(
-    'eam_user',
-    JSON.stringify({
-      id: profile.value?.id,
-      username: profile.value?.username,
-      fullName: fullName.value,
-      role: profile.value?.role,
-    }),
-  )
-  localStorage.setItem('eam_token', 'fake-jwt-token')
-
-  loading.value = false
-  router.push('/dashboard')
 }
 
 function fillDemo(role: string) {
-  const user = MOCK_USERS.find((u) => u.role === role)
-  if (user) {
-    username.value = user.username
-    password.value = '123'
+  if (role === 'ADMIN') {
+    username.value = 'admin'
+    password.value = 'admin'
+  } else if (role === 'MASTER') {
+    username.value = 'master1'
+    password.value = 'master'
+  } else if (role === 'TECHNICIAN') {
+    username.value = 'tech1'
+    password.value = 'tech'
+  } else {
+    username.value = 'user1'
+    password.value = 'user'
   }
 }
 </script>

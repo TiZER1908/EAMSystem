@@ -19,7 +19,7 @@ import IconUsers from '@/assets/icons/users.svg?component'
 import IconDictionaries from '@/assets/icons/dictionaries.svg?component'
 
 const route = useRoute()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 interface MenuItem {
   path: string

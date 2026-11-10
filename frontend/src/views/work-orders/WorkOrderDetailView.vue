@@ -23,11 +23,11 @@ import IconTrash from '@/assets/icons/archive.svg?component'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const woId = computed(() => Number(route.params.id))
-const role = computed(() => authStore.user.role)
-const currentUserId = computed(() => authStore.user.id)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
+const currentUserId = computed(() => authStore.user?.id || 0)
 
 const workOrder = ref<WorkOrderDetailView | null>(null)
 const loading = ref(true)
@@ -106,9 +106,6 @@ function addSparePart(sp: SparePartView) {
       plannedQuantity: 1,
       actualQuantity: null,
       isPlanned: true,
-      isDeleted: false,
-      deletedAt: null,
-      deletedBy: null,
       sparePartName: sp.name,
     })
   }
@@ -131,9 +128,6 @@ function addTask() {
     isCompleted: false,
     completedAt: null,
     sortOrder: workOrder.value.tasks.length,
-    isDeleted: false,
-    deletedAt: null,
-    deletedBy: null,
   })
 }
 

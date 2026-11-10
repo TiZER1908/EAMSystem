@@ -8,10 +8,10 @@ import type { User } from '@/services/models.ts'
 import IconEdit from '@/assets/icons/edit.svg?component'
 
 const route = useRoute()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
-const currentUserRole = computed(() => authStore.user.role)
-const currentUserId = computed(() => authStore.user.id)
+const currentUserRole = computed(() => authStore.user?.role || 'REQUESTER')
+const currentUserId = computed(() => authStore.user?.id)
 
 const profile = ref<User | null>(null)
 const loading = ref(true)
@@ -37,7 +37,7 @@ async function loadProfile() {
   loading.value = true
   error.value = null
   try {
-    profile.value = await userService.getUserById(targetUserId.value)
+    profile.value = await userService.getUserById(targetUserId.value || 0)
   } catch {
     error.value = 'Пользователь не найден'
   } finally {

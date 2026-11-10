@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import lombok.RequiredArgsConstructor;
 import ru.tizer1908.vkr.eam_system.dto.AssetTypeDto;
 import ru.tizer1908.vkr.eam_system.dto.LocationDto;
@@ -34,14 +36,17 @@ public class DictionaryController {
     public List<AssetType> getAssetTypes() {
         return assetTypeService.getAllAssetTypes();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/asset-types")
     public AssetType createAssetType(@RequestBody AssetTypeDto assetTypeDto) {
     	return assetTypeService.createAssetType(assetTypeDto); 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/asset-types/{id}")
     public AssetType updateAssetType(@PathVariable Long id, @RequestBody AssetTypeDto assetTypeDto) {
         return assetTypeService.updateAssetType(id, assetTypeDto);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/asset-types/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public void deleteAssetType(@PathVariable Long id) {
@@ -52,14 +57,17 @@ public class DictionaryController {
     public List<LocationViewDto> getLocations() {
         return locationService.getAllLocations();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/locations")
     public Location createLocation(@RequestBody LocationDto locationDto) {
     	return locationService.createLocation(locationDto); 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/locations/{id}")
     public Location updateLocation(@PathVariable Long id, @RequestBody LocationDto locationDto) {
         return locationService.updateLocation(id, locationDto);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/locations/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public void deleteLocation(@PathVariable Long id) {
@@ -70,14 +78,17 @@ public class DictionaryController {
     public List<SparePartCategory> getSparePartCategories() {
         return sparePartCategoryService.getAllSparePartCategories();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/spare-part-categories")
     public SparePartCategory createSparePartCategory(@RequestBody SparePartCategoryDto sparePartCategoryDto) {
     	return sparePartCategoryService.createSparePartCategory(sparePartCategoryDto); 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/spare-part-categories/{id}")
     public SparePartCategory updateSparePartCategory(@PathVariable Long id, @RequestBody SparePartCategoryDto sparePartCategoryDto) {
         return sparePartCategoryService.updateSparePartCategory(id, sparePartCategoryDto);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/spare-part-categories/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSparePartCategory(@PathVariable Long id) {
@@ -88,14 +99,17 @@ public class DictionaryController {
     public List<Unit> getUnits() {
         return unitService.getAllUnits();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/units")
     public Unit createUnit(@RequestBody UnitDto unitDto) {
     	return unitService.createUnit(unitDto); 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/units/{id}")
     public Unit updateUnit(@PathVariable Long id, @RequestBody UnitDto unitDto) {
         return unitService.updateUnit(id, unitDto);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/units/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public void deleteUnit(@PathVariable Long id) {

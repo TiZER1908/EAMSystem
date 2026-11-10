@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import { userService } from '@/services/userService'
 import type { User } from '@/services/models.ts'
 
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const profileForm = ref({
   lastName: '',
@@ -29,7 +29,7 @@ const passwordError = ref<string | null>(null)
 
 onMounted(async () => {
   try {
-    const user = await userService.getUserById(authStore.user.id)
+    const user = await userService.getUserById(authStore.user?.id || 0)
     profileForm.value = {
       lastName: user.lastName,
       firstName: user.firstName,
@@ -59,7 +59,7 @@ async function handleSaveProfile() {
 
   profileSaving.value = true
   try {
-    await userService.updateProfile(authStore.user.id, {
+    await userService.updateProfile(authStore.user?.id || 0, {
       lastName: profileForm.value.lastName,
       firstName: profileForm.value.firstName,
       middleName: profileForm.value.middleName || null,
@@ -90,7 +90,7 @@ async function handleChangePassword() {
 
   passwordSaving.value = true
   try {
-    await userService.changePassword(authStore.user.id, {
+    await userService.changePassword(authStore.user?.id || 0, {
       currentPassword: passwordForm.value.currentPassword,
       newPassword: passwordForm.value.newPassword,
     })

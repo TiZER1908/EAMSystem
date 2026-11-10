@@ -8,10 +8,10 @@ import type { Asset, AssetStatus, AssetType, Location } from '@/services/models'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const assetId = computed(() => Number(route.params.id))
-const role = computed(() => authStore.user.role)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
 const canEdit = computed(() => ['ADMIN', 'MASTER'].includes(role.value))
 
 const form = ref({

@@ -14,11 +14,11 @@ import IconLink from '@/assets/icons/work-orders.svg?component'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore
+const authStore = useAuthStore()
 
 const requestId = computed(() => Number(route.params.id))
-const role = computed(() => authStore.user.role)
-const currentUserId = computed(() => authStore.user.id)
+const role = computed(() => authStore.user?.role || 'REQUESTER')
+const currentUserId = computed(() => authStore.user?.id || 0)
 
 const request = ref<RequestView | null>(null)
 const linkedWorkOrder = ref<WorkOrderView | null>(null)
