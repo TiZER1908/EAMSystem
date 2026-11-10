@@ -19,7 +19,7 @@ export interface User extends BaseEntity {
   id: number
   username: string
   email: string
-  passwordHash: string
+  password: string
   lastName: string
   firstName: string
   middleName: string | null

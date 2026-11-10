@@ -1,0 +1,21 @@
+CREATE TABLE users (
+	id BIGSERIAL PRIMARY KEY,
+	username VARCHAR(50) UNIQUE NOT NULL,
+	email VARCHAR(255) UNIQUE NOT NULL,
+	password_hash VARCHAR(255) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	first_name VARCHAR(100) NOT NULL,
+	middle_name VARCHAR(100) NULL,
+	phone VARCHAR(20) NULL,
+	role VARCHAR(20) NOT NULL,
+	status VARCHAR(20) NOT NULL,
+	is_deleted BOOLEAN NOT NULL DEFAULT false,
+	deleted_at TIMESTAMP NULL,
+	deleted_by BIGINT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT fk_deleted_by 
+        FOREIGN KEY (deleted_by) 
+        REFERENCES users (id)
+        ON DELETE RESTRICT 
+);

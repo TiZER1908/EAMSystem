@@ -114,7 +114,7 @@ export const userService = {
     await new Promise((r) => setTimeout(r, 300))
   },
 
-  async createUser(payload: Partial<User> & { password?: string }): Promise<User> {
+  async createUser(payload: Partial<User>): Promise<User> {
     // const { data } = await api.post<User>('/users', payload)
     // return data
 
@@ -124,7 +124,7 @@ export const userService = {
       id: Date.now(),
       username: payload.username || '',
       email: payload.email || '',
-      passwordHash: 'hash',
+      password: '123',
       lastName: payload.lastName || '',
       firstName: payload.firstName || '',
       middleName: payload.middleName || null,
